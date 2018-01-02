@@ -1,0 +1,10 @@
+cache/2554.zip filter=fat -crlf
+cache/2of4brif.txt filter=fat -crlf
+cache/bnc_paragraphs.pkl.bz2 filter=fat -crlf
+cache/FoxStoplist.txt filter=fat -crlf
+cache/SmartStoplist.txt filter=fat -crlf
+cache/vocabulary_lists.zip filter=fat -crlf
+cache/Brismo.cfg filter=fat -crlf
+cache/sampled-stimuli.pkl filter=fat -crlf
+cache/bnc_texts_78639361_183975_251_499.txt filter=fat -crlf
+cache/bnc_vocab_49324.txt filter=fat -crlf
