@@ -1,0 +1,6 @@
+[rsync]
+remote = www.lawsofthought.org:/home/andrews/shared/git 
+user = git
+port = 2222
+[http]
+remote = http://www.lawsofthought.org/shared/git
