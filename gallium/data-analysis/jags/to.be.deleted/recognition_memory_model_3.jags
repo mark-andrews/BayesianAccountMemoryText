@@ -1,0 +1,34 @@
+model {
+
+    for (i in 1:N) {
+
+	ll[i] <- log(p[i])*y[i] + log(1-p[i])*(1-y[i])
+    
+        y[i] ~ dbern(p[i])
+        p[i] <- ilogit(alpha.0 + 	
+			b * psi[i] +
+			beta * present[i] +
+			alpha.text[text[i]] + 
+			alpha.subject[subject[i]])
+    }
+
+    for (k in 1:K){
+        alpha.text[k] ~ dnorm(0.0, alpha.text.tau)
+    }
+
+    for (j in 1:J){
+        alpha.subject[j] ~ dnorm(0.0, alpha.subject.tau)
+    }
+
+    alpha.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    alpha.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    alpha.text.tau <- 1/(alpha.text.sigma^2)
+    alpha.subject.tau <- 1/(alpha.subject.sigma^2)
+
+    alpha.0 ~ dnorm(0, 1.0e-5)
+    beta ~ dnorm(0, 1.0e-5)
+    b ~ dnorm(0, 1.0e-5)
+
+    LL <- sum(ll[1:N])
+}

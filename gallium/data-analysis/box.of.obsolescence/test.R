@@ -1,0 +1,5 @@
+library('runjags')
+parsamples <- run.jags('example1.bug', data=list('x'=x,'N'=N), monitor=c('mu','tau'), sample=100, method='rjparallel')
+summary(parsamples)
+newparsamples <- extend.jags(parsamples, sample=100)
+summary(parsamples)
