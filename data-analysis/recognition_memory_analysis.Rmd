@@ -1,0 +1,397 @@
+---
+title: "Recognition memory tests analyses"
+output:
+  pdf_document:
+    fig_caption: true
+    keep_tex: yes
+---
+
+```{r global_options, include=FALSE}
+
+# Initialization
+rm(list=ls()) # Clear all
+
+# Load all packages 
+library(knitr)
+library(lme4)
+library(pander)
+library(xtable)
+
+# Source special purpose utilities
+source('utils.R')
+
+# General set up
+use.cached.results <- TRUE # Set to FALSE to re-generate all results 
+cache.directory <- '../cache'
+cached.results.filename <- 'recognition.memory.logistic.glmer.results.Rda'
+recognition.data.filename <- 'experiment_brisbane_recognition_memory_tests.csv'
+recall.data.filename <- 'experiment_brisbane_recall_memory_tests_results.csv'
+
+# Global chunk options
+opts_chunk$set(echo=FALSE, 
+               warning=FALSE, 
+               message=FALSE)
+
+# Get data 
+Df.recognition <- get.recognition.data(file.path(cache.directory, recognition.data.filename))
+Df.recall <- get.recall.data(file.path(cache.directory, recall.data.filename))
+
+```
+
+```{r general.descriptives, results='hide'}
+# This is just for the calculation of subject totals, etc.
+Df.session <- rbind(select(Df.recognition, session, subject, age, sex, slide),
+                    select(Df.recall, session, subject, age, sex, slide)) %>% distinct() 
+
+n.recognition.sessions <- length(unique(Df.recognition$slide))
+n.recall.sessions <- length(unique(Df.recall$slide))
+n.sessions <- length(unique(Df.session$slide))
+
+n.recognition.subjects <- length(unique(Df.recognition$subject))
+n.recall.subjects <- length(unique(Df.recall$subject))
+n.subjects <- length(unique(Df.session$subject))
+
+assert_that(n.recognition.sessions +  n.recall.sessions == n.sessions);
+
+sessions.per.subject <- as.numeric(Df.session %>% 
+                                     group_by(subject) %>% 
+                                     summarise(count = n()) %>% 
+                                     select(count) %>% 
+                                     summarize(mean = mean(count)))
+
+gender.counts.df <- Df.session %>% 
+  select(subject, sex) %>% 
+  distinct() %>% 
+  group_by(sex) %>% 
+  summarize(count = n())
+
+gender.counts <- gender.counts.df$count
+names(gender.counts) <- gender.counts.df$sex
+
+percentile.range.lims <- function(x, p=0.95, k=1){
+  q <- (1 - p)/2 
+  quants <- quantile(x, probs = c(q, 1-q))
+  quants[k]
+}
+
+.age.stats <- Df.session %>% 
+  distinct(subject, age) %>% 
+  summarize(median = median(age), 
+            lower = percentile.range.lims(age, k=1), 
+            upper = percentile.range.lims(age, k=2))
+
+age.stats <- as.integer(.age.stats[1,])
+names(age.stats) <- names(.age.stats)
+
+```
+
+In experiment *Brisbane*, each participant performed up to three separate memory tests.  In each test, the participant read a text and then had their memory tested either by a recognition or by a recall test. There were `r n.subjects` participants (`r gender.counts['Female']` female, `r gender.counts['Male']` male; the median age was `r age.stats['median']`, with 95% of participants having ages between `r age.stats['lower']` and `r age.stats['upper']`) and `r n.sessions` separate memory test sessions in total in the experiment. Of the `r n.sessions` separate tests, `r n.recognition.sessions` were recognition memory tests (performed by `r n.recognition.subjects` participants), and `r n.recall.sessions` were recall memory tests (performed by `r n.recall.subjects` participants). In general, the average number of tests done per participant was `r round(sessions.per.subject, 1)` sessions.
+
+# Recognition memory test analysis 
+
+## Accuracy 
+
+```{r recognition.memory.descriptives}
+hit.stats <- Df.recognition %>% 
+  group_by(slide) %>%
+  summarize(hits = n()) %>% 
+  summarize(hit_rate = mean(hits)/20)
+
+response.type.stats <- Df.recognition %>% 
+  group_by(expected) %>%
+  summarize(response = mean(response))
+
+accuracy.stats <- Df.recognition %>%
+  summarize(accuracy = mean(correct))
+
+hit.rate <- as.numeric(hit.stats[1, 'hit_rate'])
+accuracy <- as.numeric(accuracy.stats[1, 'accuracy'])
+
+response.type.rates <- unlist(response.type.stats[,'response'])
+names(response.type.rates) <- unlist(response.type.stats[,'expected'])
+
+```
+
+In the recognition tests, on each trial, subjects were presented with a word that was either present or absent in the text. They given 5 seconds to make their response, and across all test sessions, responses were made on `r 100*round(hit.rate,2)`% of trials. The average accuracy was `r 100*round(accuracy, 2)`%. The false positive rate was `r 100*round(response.type.rates['FALSE'], 2)`%, while the false negative rate was `r 100*round(1 - response.type.rates['TRUE'], 2)`%.
+
+```{r }
+quantile.cut <- function(x, K=50){
+  breaks = quantile(x, probs=seq(0.00, 1.00, length.out=K), 
+                      na.rm=T)
+
+  cut(x, breaks=breaks)
+}
+
+transform <- function(p, eps=0.01) {
+  eps/2 + (1-eps)*p 
+}
+
+logit <- function(p, eps=0.01) {
+  q <- transform(p, eps) 
+  log(q/(1-q))
+}
+
+Df.recognition.1 <- Df.recognition %>% mutate(pp.psi = as.numeric(scale(posterior.predictions)),
+                                              cc.psi = as.numeric(scale(cooccurrence.predictions)),
+                                              aa.psi = as.numeric(scale(association.predictions))) %>% 
+  mutate(pp.psi.cut = quantile.cut(pp.psi),
+         aa.psi.cut = quantile.cut(aa.psi),
+         cc.psi.cut = quantile.cut(cc.psi))
+
+logistic.curve.fit <- function(Df, var, title){
+  
+  var.cut <- paste(var, '.cut', sep='')
+  
+  grouping.variables <- lapply(c(var.cut, 'expected'),
+                               as.symbol)
+  
+  Df.tmp <- Df %>%
+    group_by_(.dots = grouping.variables) %>% 
+    summarise_(response = 'mean(response, na.rm=T)',
+               psi = sprintf('mean(%s)', var)) 
+  
+  eps = 0.05
+  Df.tmp.2 <- Df.tmp %>%
+    as.data.frame() %>% 
+    select(psi, expected, response)
+
+  M <- glm(as.formula(sprintf('response ~ %s * expected', var)), 
+           family = binomial,
+           data = Df)
+  
+  Df$predictions <- predict(M, type='response')
+  Df$psi <- Df[var]
+  
+  ggplot(Df.tmp, 
+         mapping=aes(x = psi, y = response, colour=expected)) + 
+    geom_point() +
+    geom_line(Df, mapping = aes(x=psi, y=predictions, colour=expected)) + 
+    geom_jitter(Df, mapping = aes(x=psi, y = -.2 + .1*expected + 1.3*response, colour=expected), size=0.01, height=0.01) +
+    ggtitle(title, subtitle = sprintf('AIC: %2.2f', AIC(M))) +
+    scale_y_continuous(breaks = c(0.0, 0.25, 0.5, 0.75, 1.0)) + 
+    theme_classic()
+  
+}
+```
+
+
+```{r}
+logistic.curve.fit(Df.recognition.1, 'pp.psi', 'Topic model')
+logistic.curve.fit(Df.recognition.1, 'cc.psi', 'Cooccurrence model')
+logistic.curve.fit(Df.recognition.1, 'aa.psi', 'Association model')
+
+```
+
+
+
+
+```{r}
+
+glmer.recognition.memory.analysis <- function(Df){
+  
+  glmer.control <- glmerControl(optimizer="bobyqa",
+                                optCtrl=list(maxfun=100000))
+
+  psi.predictors <- c('posterior.predictions',
+                      'association.predictions',
+                      'cooccurrence.predictions')
+  
+  Df[, psi.predictors] <- lapply(Df[, psi.predictors],
+                                 scale)
+  
+  model.formula.1 <- 'response ~ expected + %s +  (1|text) + (1|subject) + (1|word)'
+  model.formula.2 <- 'response ~ expected + %s +  (%s + expected|text) + (%s + expected|subject) + (1|word)'
+  model.formula.3 <- 'response ~ expected + %s +  (%s + expected|text) + (%s|subject) + (1|word)'
+  model.formula.4 <- 'response ~ expected * %s +  (%s + expected|text) + (%s|subject) + (1|word)'
+  model.formula.5 <- 'response ~ expected * %s +  (%s + expected|text) + (%s + expected|subject) + (1|word)'
+  model.formula.6 <- 'response ~ expected * %s +  (%s * expected|text) + (%s * expected|subject) + (1|word)'
+    
+  make.formula <- function(formula.string, var){
+    as.formula(sprintf(formula.string, var, var, var))
+  }
+  
+  logistic.glmer <- function(formula, predictor){
+    withWarnings(
+      glmer(make.formula(formula, predictor),
+            data=Df,
+            control = glmer.control,
+            family=binomial)
+    )
+  }
+
+  model.formulae <- list(model.1 = model.formula.1,
+                         model.2 = model.formula.2,
+                         model.3 = model.formula.3,
+                         model.4 = model.formula.4,
+                         model.5 = model.formula.5,
+                         model.6 = model.formula.6)
+  
+  predictors <- list(TopicModel = 'posterior.predictions',
+                     CooccurrenceModel = 'cooccurrence.predictions',
+                     AssociationModel = 'association.predictions',
+                     NullModel = '1')
+                     
+  lapply(model.formulae,
+         function(formula){
+           lapply(predictors,
+                  function(predictor){
+                    logistic.glmer(formula, predictor)
+                  })
+         }
+  )
+  
+}
+  
+get.results.table <- function(model.results){
+  
+  results <- rbind(sapply(model.results, function(result) BIC(result$value)), 
+                   sapply(model.results, function(result) AIC(result$value)), 
+                   sapply(model.results, function(result) -2*logLik(result$value)[1]))
+  
+  rownames(results) <- c('BIC', 'AIC', 'Deviance')
+  
+  results
+}
+  
+
+if (!use.cached.results) {
+  model.results <- glmer.recognition.memory.analysis(Df.recognition)
+  save('model.results',
+       file=file.path(cache.directory, cached.results.filename))
+} else {
+  load(file.path(cache.directory, cached.results.filename))
+}
+
+```
+
+## Model 1
+
+```{r}
+pander(get.results.table(model.results[['model.1']]))
+```
+## Model 2
+
+```{r}
+pander(get.results.table(model.results[['model.2']]))
+```
+
+## Model 3
+
+```{r}
+pander(get.results.table(model.results[['model.3']]))
+```
+
+
+## Model 4
+
+```{r}
+pander(get.results.table(model.results[['model.4']]))
+```
+
+
+## Model 5
+
+```{r}
+pander(get.results.table(model.results[['model.5']]))
+```
+
+## Model 6
+
+```{r}
+pander(get.results.table(model.results[['model.6']]))
+```
+# Bayesian data analysis
+
+```{r}
+model.names <- list(model.1 = "mcmc_recognition_model_v1_seed_666_burn_10000_sample_10000_dic_10000_thin_10.Rda",
+                    model.2 = "mcmc_recognition_model_v2_seed_667_burn_10000_sample_10000_dic_10000_thin_10.Rda",
+                    model.3 = "mcmc_recognition_model_v3_seed_1667_burn_10000_sample_10000_dic_10000_thin_10.Rda",
+                    model.4 = "mcmc_recognition_model_v4_seed_10667_burn_10000_sample_10000_dic_10000_thin_10.Rda",
+                    model.5 = "mcmc_recognition_model_v5_seed_11667_burn_10000_sample_10000_dic_10000_thin_10.Rda",
+                    model.6 = "mcmc_recognition_model_v6_seed_14667_burn_10000_sample_10000_dic_10000_thin_10.Rda")
+
+bda.results <- lapply(model.names,
+                      function(model.name) readRDS(file.path(cache.directory, model.name))
+)
+
+
+
+get.max.psrf <- function(model.name){
+
+  max(sapply(lapply(bda.results[[model.name]]$S,
+                    function(s) gelman.diag(s, multivariate = F)),
+             function(x) max(x$psrf[,2])))
+
+}
+
+get.dic <- function(model.name){
+
+  deviance <- sapply(bda.results[[model.name]]$D,
+                     function(d) round(sum(d$deviance) + sum(d$penalty))
+  )
+
+  deviance['TopicModel'] <- deviance['pp']
+  deviance['CooccurrenceModel'] <- deviance['cc']
+  deviance['AssociationModel'] <- deviance['aa']
+  deviance['NullModel'] <- deviance['null']
+
+  deviance[c('TopicModel', 'CooccurrenceModel', 'AssociationModel', 'NullModel')]
+}
+
+get.akaike.weights <- function(model.name){
+  deviances <- get.dic(model.name)
+  f <- exp(-(deviances - min(deviances))/2)
+  f <- f[c('TopicModel', 'CooccurrenceModel', 'AssociationModel')]
+  f/sum(f)
+}
+
+make.results.table <- function(table.func){
+  do.call(rbind,
+          lapply(list(model.1 = 'model.1',
+                      model.2 = 'model.2',
+                      model.3 = 'model.3',
+                      model.4 = 'model.4',
+                      model.5 = 'model.5',
+                      model.6 = 'model.6'),
+                 table.func)
+  )
+}
+
+bda.results.table <- make.results.table(get.dic)
+akaike.weights.table <- make.results.table(get.akaike.weights)
+
+pander(bda.results.table)
+
+
+
+```
+
+## Akaike weights
+```{r}
+pander(akaike.weights.table)
+```
+
+## Recall results
+```{r}
+get_recall_results <- function(mcmc_results_filename){
+  bda_results <- readRDS(file.path(cache.directory, 
+                                   mcmc_results_filename))
+}
+
+get_recall_models_dic <- function(bda_results){
+  
+  get_dic <- function(bda_results, model_name){
+    sum(bda_results$D[[model_name]]$deviance) + sum(bda_results$D[[model_name]]$penalty)
+  }
+  
+  lapply(list('TopicModel' = 'pp', 
+              'CooccurrenceModel' = 'cc', 
+              'AssociationModel' = 'aa'),
+         function(model_name) get_dic(bda_results, model_name))
+  
+}
+
+recall_results <- get_recall_results('mcmc_recall_model_seed_1401_burn_1000_sample_1000_dic_1000_thin_10.Rda')
+pander(unlist(get_recall_models_dic(recall_results)))
+```
+

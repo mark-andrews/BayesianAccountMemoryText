@@ -1,0 +1,53 @@
+model {
+
+    for (i in 1:N) {
+
+	ll[i] <- y[i]*log(p[i]) + (1-y[i])*log(1-p[i])
+
+        y[i] ~ dbern(p[i])
+        p[i] <- ilogit(alpha.0 + 	
+			(b + b.text[text[i]] + b.subject[subject[i]]) * psi[i] +
+			(beta +  beta.text[text[i]]) * present[i] +
+			alpha.text[text[i]] + 
+			alpha.subject[subject[i]] +
+			alpha.item[item[i]])
+    }
+
+    for (k in 1:K){
+        alpha.text[k] ~ dnorm(0.0, alpha.text.tau)
+        b.text[k] ~ dnorm(0.0, b.text.tau)
+        beta.text[k] ~ dnorm(0.0, beta.text.tau)
+    }
+
+    for (j in 1:J){
+        alpha.subject[j] ~ dnorm(0.0, alpha.subject.tau)
+        b.subject[j] ~ dnorm(0.0, b.subject.tau)
+    }
+
+    for (l in 1:L){
+        alpha.item[l] ~ dnorm(0.0, alpha.item.tau)
+    }
+
+    alpha.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    alpha.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    alpha.item.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    alpha.text.tau <- 1/(alpha.text.sigma^2)
+    alpha.subject.tau <- 1/(alpha.subject.sigma^2)
+    alpha.item.tau <- 1/(alpha.item.sigma^2)
+
+    b.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    b.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    b.text.tau <- 1/(b.text.sigma^2)
+    b.subject.tau <- 1/(b.subject.sigma^2)
+
+    beta.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    beta.text.tau <- 1/(beta.text.sigma^2)
+
+    alpha.0 ~ dnorm(0, 1.0e-5)
+    beta ~ dnorm(0, 1.0e-5)
+    b ~ dnorm(0, 1.0e-5)
+
+}

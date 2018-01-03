@@ -1,0 +1,6 @@
+bash run_mcmc_recognition_model.sh 1 
+bash run_mcmc_recognition_model.sh 2 
+bash run_mcmc_recognition_model.sh 3
+bash run_mcmc_recognition_model.sh 4 
+bash run_mcmc_recognition_model.sh 5 
+bash run_mcmc_recognition_model.sh 6
