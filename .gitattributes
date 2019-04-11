@@ -1,0 +1,14 @@
+hdptm_201117172636_2290_state_*.npz filter=fat -crlf
+make_corpus/cache/2554.zip filter=fat -crlf
+make_corpus/cache/bnc_paragraphs.pkl.bz2 filter=fat -crlf
+make_corpus/cache/vocabulary_lists.zip filter=fat -crlf
+make_corpus/cache/Brismo.cfg filter=fat -crlf
+make_corpus/cache/sampled-stimuli.pkl filter=fat -crlf
+make_corpus/cache/bnc_texts_78639361_183975_251_499.txt filter=fat -crlf
+make_corpus/cache/bnc_vocab_49324.txt filter=fat -crlf
+bnc_texts_78639361_183975_251_499.npz filter=fat -crlf
+bnc_vocab_49328.txt filter=fat -crlf
+data-processing/cache/hdptm_201117172636_2290_posterior_average.pkl filter=fat -crlf
+data-processing/cache/posterior_predictions.2290.20202.pkl filter=fat -crlf
+data-processing/cache/hdptm_201117172636_2290_posterior_predictions_demo.csv filter=fat -crlf
+data-processing/cache/posterior_predictions_of_recalled_words.csv filter=fat -crlf

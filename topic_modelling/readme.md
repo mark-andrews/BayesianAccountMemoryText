@@ -1,62 +1,63 @@
-# Modelling with Gustav
 
-The following is the usage notes for `gustav`: 
+The probabilistic topic modelling used in this project was carried out using a custom made Python and Fortran toolbox 
+named [`gustavproject`](https://github.com/mark-andrews/gustavproject).
 
-```bash
-Gustav: Probabilistic Topic Modelling Toolbox
 
-Usage:
-  gustave model new [--model-type=<model_type>] <corpus_name> [--K_min=<K_min>] [--K_max=<K_max>]
-  gustave model <model_name> update [--iterations=<N>] [--hyperparameters] [--parallel=<K>]
-  gustave data new <corpus_name> [--data-type=<data_type>] <text_file> <vocab_file>
-  gustave init 
-  gustave (-h | --help)
-  gustave --version
+# Setup 
 
-Options:
-  -h --help                     Show this screen.
-  --version                     Show version.
-  --parallel=<K>                Number of processors [default: 1]
-  --iterations=<N>              Model update iterations [default: 100]
-  --model-type=<model_type>     Type of topic model [default: hdptm].
-  --data-type=<data_type>       Type of data set [default: bag_of_words].
-  --K_min=<K_min>               Minimum number of topics [default: 10]
-  --K_max=<K_max>               Maximum number of topics [default: 100]
-```
-## Example: Create a corpus
+To use `gustavproject` for topic modelling, first set up a Python 2.7 virtual
+environment and pip install some required software.
 
-```bash
-gustave data new foo example_corpus.txt vocab.txt
-```
-where `example_corpus.txt` is a text corpus where the "texts" are delimited by
-line breaks and the "words" are delimited by "|", e.g. 
-```bash
-foo|bar|foobar|foo|foo
-foobar|foo|bar|bar|bar
-bar|foo|bar|foo|bar
-```
-and `vocab.txt` is a line break delimited list of word types, e.g. 
-```bash
-foo
-bar
-foobar
+```{.bash}
+TMPDIR=/tmp
+VENVDIR=$TMPDIR/topic_modelling_venv
+GIT_TMPDIR=$TMPDIR/gustavproject
+VENVCMD=virtualenv2
+
+# Set up virtual environment and install everything in requirements.txt
+if [[ -d $VENVDIR ]]; then
+	rm -rf $VENVDIR
+fi
+
+$VENVCMD $VENVDIR
+source $VENVDIR/bin/activate
+pip install -r requirements.txt
 ```
 
-## Example: Initialize your topic model using corpus `foo`
+Now we install the `gustavproject`.
 
-```bash
-gustave model new foo --K_min=1000 --K_max=2500
+```{.bash}
+if [[ -d $GIT_TMPDIR ]]; then
+	rm -rf $GIT_TMPDIR
+fi
+
+# clone it
+git clone https://github.com/mark-andrews/gustavproject.git $GIT_TMPDIR
+
+# compile it
+CWD=`pwd`
+cd $GIT_TMPDIR
+git checkout 8869808  # this was latest version as of April 11, 2019
+make all
+
+# test it
+python setup.py test
+
+# pip install it 
+pip install -e .
+
+# return to original working directory
+cd $CWD
 ```
 
-The created model will be given a random name like `hdptm_180117202450_6333` where the first string of digits is datetimestamp and the second is random integer.
+# Gibbs sampling
 
-## Example: Update the topic model
+The final version of the topic model used in the this project is
+`hdptm_201117172636_2290`. The posterior distribution was sampled, using a
+Gibbs sampler, for 20000 iterations. The code used to sample from this model is
+similar to the following code, which continues the sampler for 100 iterations,
+running on 16 separate processors, and sampling hyperparameters.
 
-Update the model for 1000 iterations.
-```bash
-gustave model hdptm_180117202450_6333 update --parallel 16 --iterations=1000 --hyperparameters
+```{.bash}
+gustave model hdptm_201117172636_2290 update --parallel 16 --iterations=100 --hyperparameters
 ```
-
-## Saving results
-
-Corpora and samples are saved inside a directory called `data`, and all details are stored in the config file `gustav.cfg`.
