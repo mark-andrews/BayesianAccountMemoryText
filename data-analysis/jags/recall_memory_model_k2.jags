@@ -1,0 +1,49 @@
+# No intercept terms, fixed or random, as they will cancel in the normalized
+# exponential (softmax).
+
+model {
+
+	for (i in 1:N) {
+
+		for (l in 1:L){
+			omega[i, l] <-  (b_a + b_a.text[text[i]] + b_a.subject[subject[i]]) * psi_a[text[i],l] +
+                                        (b_b + b_b.text[text[i]] + b_b.subject[subject[i]]) * psi_b[text[i],l] 
+			exp.omega[i, l] <- exp(omega[i, l])
+		}
+
+		p[i, 1:L] <- exp.omega[i, 1:L]/sum(exp.omega[i, 1:L])
+
+		y[i] ~ dcat(p[i, 1:L])
+
+		density[i] <- p[i, y[i]]
+
+	}
+
+	
+    for (k in 1:K){
+        b_a.text[k] ~ dnorm(0.0, b_a.text.tau)
+        b_b.text[k] ~ dnorm(0.0, b_b.text.tau)
+    }
+
+    for (j in 1:J){
+        b_a.subject[j] ~ dnorm(0.0, b_a.subject.tau)
+        b_b.subject[j] ~ dnorm(0.0, b_b.subject.tau)
+    }
+
+    b_a.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    b_b.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    b_a.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    b_b.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    b_a.text.tau <- 1/(b_a.text.sigma^2)
+    b_b.text.tau <- 1/(b_b.text.sigma^2)
+
+    b_a.subject.tau <- 1/(b_a.subject.sigma^2)
+    b_b.subject.tau <- 1/(b_b.subject.sigma^2)
+
+    b_a ~ dnorm(0, 1.0e-5)
+    b_b ~ dnorm(0, 1.0e-5)
+
+
+}

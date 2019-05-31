@@ -1,0 +1,38 @@
+# No intercept terms, fixed or random, as they will cancel in the normalized
+# exponential (softmax).
+
+model {
+
+	for (i in 1:N) {
+
+		for (l in 1:L){
+			omega[i, l] <- (b + b.text[text[i]] + b.subject[subject[i]])
+			exp.omega[i, l] <- exp(omega[i, l])
+		}
+
+		p[i, 1:L] <- exp.omega[i, 1:L]/sum(exp.omega[i, 1:L])
+
+		y[i] ~ dcat(p[i, 1:L])
+
+		density[i] <- p[i, y[i]]
+
+	}
+
+	
+    for (k in 1:K){
+        b.text[k] ~ dnorm(0.0, b.text.tau)
+    }
+
+    for (j in 1:J){
+        b.subject[j] ~ dnorm(0.0, b.subject.tau)
+    }
+
+    b.text.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+    b.subject.sigma ~ dnorm(0.0, 1/100.0)T(0,)
+
+    b.text.tau <- 1/(b.text.sigma^2)
+    b.subject.tau <- 1/(b.subject.sigma^2)
+
+    b ~ dnorm(0, 1.0e-5)
+
+}
