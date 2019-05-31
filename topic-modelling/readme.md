@@ -50,6 +50,8 @@ pip install -e .
 cd $CWD
 ```
 
+All of the above shell commands are also available in `setup.sh`.
+
 # Gibbs sampling
 
 The final version of the topic model used in the this project is
