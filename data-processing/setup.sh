@@ -36,7 +36,6 @@ cd $CWD
 
 ln -fs "$(realpath ../make-corpus/cache/Brismo.cfg)" cache
 ln -fs "$(realpath ../topic-modelling/data/corpora/bnc_texts_78639361_183975_251_499.npz)" cache
-ln -fs "$(realpath ../data-analysis/cache/brisbane_06b643a_recall_results.pkl)" cache
 for f in ../topic-modelling/data/samples/hdptm_201117172636_2290_state_*.npz; 
 	do ln -fs `realpath $f` cache;
 done
