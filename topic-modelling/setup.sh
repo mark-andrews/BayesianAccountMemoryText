@@ -34,9 +34,9 @@ pip install -e .
 # return to original working directory
 cd $CWD
 
-read -p "Do you want to run the sampler? (Enter 'Yes' if so)" run_sampler
+read -p "Do you want to run the sampler? (Enter 'Yes' if so): " run_sampler
 
-if [[ $vpn == "Yes" ]]
+if [[ $run_sampler == "Yes" ]]
    then 
       gustave model hdptm_201117172636_2290 update --parallel 16 --iterations=100 --hyperparameters
 fi
