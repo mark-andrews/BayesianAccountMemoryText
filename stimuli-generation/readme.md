@@ -22,8 +22,3 @@ Stimuli generation for experiment *Brisbane*
     Markdown`. These extensions need to be manually
     installed from
     <https://github.com/ipython-contrib/IPython-notebook-extensions.git>.
-
--   Set up symbolic links to needed files as follows:
-```{.bash}
-ln -s $(realpath ~/gitdev/projects/apricot/make_corpus/cache/2554.zip)
-```
