@@ -14,3 +14,5 @@ data-processing/cache/hdptm_201117172636_2290_posterior_predictions_demo.csv fil
 data-processing/cache/posterior_predictions_of_recalled_words.csv filter=fat -crlf
 data-processing/cache/brisbane_06b643a_recall_results.pkl filter=fat -crlf
 data-processing/cache/06b643a.pkl filter=fat -crlf
+data-processing/cache/brisbane_06b643a_recognition_results.pkl filter=fat -crlf
+data-processing/cache/brisbane_06b643a_recall_results.pkl filter=fat -crlf
