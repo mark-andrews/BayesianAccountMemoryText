@@ -16,3 +16,5 @@ data-processing/cache/brisbane_06b643a_recall_results.pkl filter=fat -crlf
 data-processing/cache/06b643a.pkl filter=fat -crlf
 data-processing/cache/brisbane_06b643a_recognition_results.pkl filter=fat -crlf
 data-processing/cache/brisbane_06b643a_recall_results.pkl filter=fat -crlf
+data-processing/cache/bnc_78723408_250_500_49328.npz.bz2 filter=fat -crlf
+data-processing/cache/bnc_texts_78639361_183975_251_499.txt.bz2 filter=fat -crlf
