@@ -1,0 +1,324 @@
+Understanding human memory for spoken and written language that goes beyond
+isolated words or sentences informs our understanding of human memory generally
+and also language comprehension. It has been the subject of investigation in
+psychology for almost a century and since the seminal work on this topic, but
+especially since the advent of schema theory based accounts beginning in the
+1970s, there has been something close to a consensus on the broad and general
+characteristics of how human memory for text works. Roughly speaking, according to this account,
+the recognition or recall of the content of a text is based on querying a
+representation of that text that is constructed on the basis of background
+knowledge and experience. Despite the widespread appeal of this account, and
+despite there being ample empirical evidence showing that we use our background
+knowledge to make inferences and associations concerning text content and that
+these inferences then influence our memory, this account is largely an informal
+theory. As such, it does not lead to precise and testable predictions, is
+challenging to falsify, or to elaborate as a theory of memory or language
+comprehension. The purpose of this paper, therefore, is to provide a formal or
+computational version of this widely held account of text memory. In particular,
+we describe human memory for text as a Bayesian computational model whereby
+background knowledge, in the form of knowledge of coarse grained statistical
+patterns across spoken and written language, is used via Bayes's rule to infer a
+semantic representation of a text's content, and then this is used via posterior
+predictive inference as the basis of our memory of what words were and were not
+present in text. We have implemented this account as a \hdptm, trained it on an
+approximately 80 million word portion of the \bnc, and evaluated it using
+recognition and recall memory results from behavioural experiments involving over 200
+participants.
+
+The behavioural experiments show that after reading everday texts under normal
+reading conditions, participants nontheless have relatively high false positive
+and false negative recognition and recall rates. In other words, when we read
+everyday texts, we have a relatively high probability of falsely remembering
+items that were not in the text, and also missing items that were there. The
+probability of remembering or not remembering any given item in the text, whether falsely or
+veridically, is well predicted by the Bayesian model. For example, the median
+$R^2$ value of linear models predicting recognition memory rates from the
+posterior predictive probabilities of the Bayesian model is 
+$`r round(recognition_preliminary_results$Df_rsquared_median['bayes'], 3)`$. 
+The main focus of our evaluation analyses, 
+however, is comparing the predictions of the
+Bayesian model against those of nontrivial alternative models. We specifically
+compared the Bayesian model to two association based models of text memory.
+According to both of these accounts, which words we do an do not remember from a
+text, whether falsely or veridically, is based on the average associative
+strength between the words in the text and any other word 
+(see Equation \ref{eq:probc_w_text}, Page \pageref{eq:probc_w_text}; 
+ Equation \ref{eq:proba_w_text}, Page \pageref{eq:proba_w_text}). 
+For example, if word $w_{j^\prime i^\prime}$ is
+highly associated on average with the words in text $\textj{{j^\prime}}$, then 
+it has a high probability of being remembered, either falsely or veridically,
+after having read that text. Compared to these associative models of text memory, 
+by every measure used in the analyses, the predictions of the Bayesian model are 
+superior, often overwhelmingly so. We take this collection of results 
+as strong 
+evidence in favour of the Bayesian account of text memory that we have 
+presented in this paper.
+
+Before we attempt to draw more general conclusions from this work, we will
+discuss a number of noteworthy issues that arose from the analyses, and also
+address some potential criticisms of how we have interpreted these analyses. To begin, it is noteworthy that there is considerably stronger evidence in
+favour of the Bayesian model from the results of the recall memory tests than
+from those of the recognition memory tests. Although in both cases the Bayesian
+model is shown to be preferrable to the alternatives, the superiority of the
+Bayesian is remarkably stronger based on the recall memory results. One possible
+explanation of this is that recall memory tests are a more sensitive measure of
+knowledge effects on text memory [@long2008importance], which is precisely what
+the Bayesian model is designed to describe. According to this account,
+recognition memory only minimally involves the semantic representation of the
+text's content, and the acceptance or rejection of the words in the recognition
+test can be accomplished using a more superficial representation of the text.
+While this is an interesting and practically important possibility, an
+alternative is that the recognition tests used here were not optimally designed
+to discriminate between the predictions of the Bayesian and the associative
+models. The recognition test word lists were designed by choosing keywords from
+the text itself and from its adjacent texts. This method gave us an objective
+means to create lists where all words were likely to be related to the text's
+content (with half of the words actually occurring in the text and the others
+not), and to be theory neutral in that it did not rely on assumptions of any
+particular theory. However, it would also be possible to objectively design lists
+that can maximally discriminate between the predictions of the Bayesian models
+and its alternatives. Roughly speaking, a procedure such as this applied to the case of
+discriminating between two alternative models, would create lists that contained
+mixtures of words, some of which were highly predicted by the first model and
+not the second, while others were highly predicted by the second and not the
+first. Lists designed in this manner would not a priori favour one model over
+the other but would be able to maximize the ability to discriminate between
+their respective predictions. We consider this kind of optimal experimental
+design as an important option in future research on this topic of theoretical 
+accounts of text memory.
+
+Another noteworthy finding from the analyses was that although what we have
+termed the *Cooccurrence* and *Associative* models are both in fact associative
+models of text memory, the Coccurrence model had consistently better performance
+than the Associative model. Recall that these two models differ from one another
+solely in terms of their definition of the association between two words, with
+the Coccurrence model defining association in terms of statistical cooccurrence
+within a corpus, and the Associative model defining association in terms of word
+association norm data. One relatively simple explanation for the difference in
+the predictive accuracy of these two models is simply a matter of sparse or
+missing data. Although the association norms that we have used is a very large
+example of its kind, it nonetheless only provides associates for a set of
+approximately 10,000 word types. Moreover, obtaining reliable data for low
+probability associates of any given word generally requires prohibitively large
+numbers of responses. We endeavoured to minimize the effect of data sparsity
+arising from the word association norms by only using texts where most words
+were in word association norm stimulus set. Nonetheless, this may not be
+sufficient to make the predictions based on these norms comparable to those 
+based on the cooccurrence statistics, which are obtained from a relatively
+large corpus of 80 million words. If this explanation of the difference 
+is correct, there may be nothing theoretically interesting about the relative 
+performance of the Cooccurrence and Associative models.
+
+Although we have concluded that the Bayesian model is empirically supported by
+behavioural data, and is supported to a greater extent than some suitable and
+nontrivial alternative models, it may nonetheless still be questioned whether
+different alternative models ought to be considered. In particular, it may be
+argued that some models not tested here may better account for the behavioural
+data. We can take it for granted that there are an unlimited number of
+alternative models that we can consider, and that there are undoubtedly in
+principle other models that better predict the behavioural data than any of
+those considered here. However, the objective of this paper is not to find a
+computational model that best predicts recognition and recall memory of everyday
+texts. Rather, the objective is primarily to show that a widely held general
+account of memory for text can be described as a Bayesian computational model,
+and that this model can make precise testable predictions that are then
+subsequently supported by behavioural evidence. The associative models to which
+we compare the Bayesian model are chosen primarily to provide a context by which
+we can interpret the predictions of the Bayesian model, and were chosen because
+they are theoretically plausible but yet still theoretically distinct from the
+the Bayesian model. We also consider the versions of the Bayesian model and the
+associative models that were used here to be minimal models of their kinds. In
+other words, more complex versions of both the Bayesian and the associative
+models are possible and justifiable. For example, an obvious major simplication
+in the Bayesian model is that it is a *bag of words* model. Likewise, there are
+many possible variants and extensions of the spreading activation in the
+associative network that is assumed by the associative models that we have used
+here. Developing and testing these more complex variants, as well as considering
+other theoretical alternatives, will be the subject of future work.
+
+Turning to some more general implications of this work, we may begin by
+considering the issue of false recognition and recall in memories for text. The
+\drm effect of @roediger:jep shows us that spontaneous false recall and
+recognition of words can occur at high rates after reading word lists. We will
+take it for granted here that this effect is robust, reliable, generalizable,
+and is due to genuine false memories as opposed to demand characteristics of the
+experiment or a liberal response bias [see @gallo2010false;
+@gallo2013associative, for discussion]. However, the word lists in the \drm task
+were all specially constructed stimuli. In the present work, we show that when
+reading randomly selected texts from a representative corpus of English, false memories can still occur at relatively high rates: 
+in our experiment, the
+false positive recognition rate was
+`r as.integer(100*round(false_positive_rate, 2))`% and the false positive recall rate was 
+`r (100*recall_rates['false_recall_rate']) %>% round()`%. 
+Crucially, these are not random errors. Falsely remembered words are words that,
+though they were not in fact present in the text,
+are highly
+predicted on the basis of the semantic representation of the text.
+This finding underlines two important points. First, false memories are exceptionally
+commonplace, occurring with high probability 
+with almost everything we read or hear 
+(as mentioned above, over `r floor(100*false_positive_rate_gt_10pc)`% 
+of the experiment's `r n_recognition_sessions` separate recognition tests
+and over `r floor(100*unlist(false_positive_recall_rate_greater_than_10pc))`% 
+of the experiment's `r n_recall_sessions` separate recall tests lead to false memory rates of greater than 10%).
+Second, false memories of this kind are a natural by-product of an otherwise
+adaptive and well designed memory system, one that is based on a semantic
+representation of what we experience that is built up from our background
+knowledge. Put another way, the work presented here implies that that human
+memory should be seen not as a type of recording and play-back system, albeit a
+noisy one, but more like a probabilistic inference based system. We infer a
+representation of the meaning of what we experience, and our memories are
+essentially an inference of which items are and are not compatible with that
+representation. Viewed from this perspective, false memories are an inevitable
+consequence of this inferential system.
+
+An additional implication of this work is that it questions the validity of
+associationist accounts of episodic memory. Associationism has a long and
+venerable history in psychology, being prominent in Artistotle's accounts of
+learning and memory [see @sorabji2004aristotle], an integral part of the
+empiricist philosophies of Locke, Hume, Berkeley, Hartley and others [see
+@hearnshaw1987shaping], and arguably a central feature of modern connectionist
+models of cognition [see, for example,
+@rumelhart1987parallel;@elman1996rethinking;@mcclelland2010letting]. An
+associationist account of episodic memory, roughly speaking, posits that
+observed stimuli activate representations, which in turn activate associated
+representations through a process of *spreading activation* [see, for example,
+@anderson1983spreading;@neely1977semantic], and the eventual distribution of
+activation is the memory representation. This general account is essentially
+being tested by both of the associative models that we have used here. While
+both models, and especially the Cooccurrence model (for reasons discussed
+above), have empirical support from the recognition and recall data, there is
+consistently less empirical support for these models than for the Bayesian
+model. From these findings, we may speculate that although the associationist
+and spreading account of episodic memory is the dominant account of the \drm
+effect [see, for example, @roediger:recall_rates;@gallo2013associative], the
+\drm effect may be explained as well, if not better, by a Bayesian account of
+word list memory that is similar to the Bayesian text memory model described
+here. We consider this to be an important hypothesis for future investigation.
+In addition, our results support an account of episodic memory that is "based on
+meaning, not on meaningless associations" [@reyna2016fuzzy, p4]. As we
+explained, our Bayesian model is a computational version of a more general
+account of memory that holds that recall and recognition are based on the
+semantic representation of what is experienced. In other words, a vital feature
+of this more general account is that memories depend on meaningful
+representations. In the Bayesian model, this representation of the meaning is a
+representation of the discourse topics in the text, each exemplified by clusters
+of inter-related words. By contrast, associationist accounts are based on
+physical or mechanistic network models that make no commitment to the
+associations in the network (i.e., edges between vertices) being based on
+meaning, and in fact these are generally assumed to be primarily based on
+physical or temporal contiguity. Given that the greater degree of empirical
+support for the Bayesian model, we can take our results as favouring accounts of
+episodic memory that are based on representations of meaning rather than 
+accounts based on physical or mechanistic models of activity spreading in a network.
+
+A final implication, and one that follows from the point just discussed, is that
+this work shows the value of rational accounts [@marr:vision:original;
+@anderson:adaptive;@chater:1999] of memory. In general, rational models of
+cognition, which are usually considered to be coextensive with Bayesian models
+of cognition, consider the computational problems that are being faced by, for
+example, vision [@Kersten:ObjectPerception], categorization
+[@sanborn2010rational], reasoning [@oaksford1994rational], and then consider
+normative solutions to these problems. @anderson:adaptive,
+@anderson_rational_memory, @anderson1991reflections describe the problem faced
+by human memory, uncontroversially, as the storage of information that may be
+relevant, for some task or other, at some point in the future. When applied to
+memory for text, determining what may be relevant in what we are reading or
+hearing crucially requires identifying major discourse topics in the text. These
+topics are effectively coarse grained statistical patterns that are learned
+through experience with spoken and written language, and whose presence can then
+be then inferred in any given text. Having outlined the nature of the problem in
+these probabilistic or statistical terms, a normative solution in terms of
+Bayesian inference follows naturally. While valid criticisms of this rational
+models approach have been raised [@bowers2012bayesian;@jones2011bayesian], we
+nonetheless view it as a principled way of generating formal hypotheses
+concerning aspects of cognition that may then be evaluated empirically. This is
+how we aimed to use this approach here, and see the real value of the rational
+approach to text memory being the extent to which it has allowed us to make precise 
+and testable predictions about what will and will not be remembered, whether falsely or veridically,
+from what we read and hear.
+
+
+<!-- statistical patterns, -->
+<!-- learned through experience, -->
+<!-- inferred in  -->
+
+
+
+
+<!-- . This involves describing discourse topics in terms of  -->
+
+
+<!-- forming a semantic representation of what the text is about. -->
+
+
+
+
+<!-- When applied to memory for -->
+<!-- text, the problem being faced crucially involves forming a semantic representation of what the text is about -->
+
+
+<!-- as that outlined in Figure -->
+
+
+
+<!-- according the widely held account of the problem being crucially involves  -->
+
+
+
+<!-- the problem we are faced with involves -->
+<!-- determining what the text is about. -->
+
+
+
+
+
+<!-- For language comprehension, it is uncontroversial to say that  problem we are faced with is forming a semantic representation of what the text is about -->
+
+<!-- As we have described, it is widely held and unconstroversial that -->
+<!-- the problem being faced when  -->
+
+<!-- It is uncontroversial to say that whenever we hear or read spoken or written language, -->
+<!-- we are faced with the a major computational problem we are faced with is forming a semantic representation of what the text is about -->
+
+
+
+
+
+
+
+<!-- anderson1991reflections -->
+
+<!-- outlines a rational account of episodic memory that describes the principal computational problem being faced as the -->
+<!-- storage of information .  -->
+
+<!-- What is the problem being faced? -->
+<!-- What is the solution to that problem? -->
+
+
+
+
+<!-- *computational* (in the -->
+<!-- sense of ; see also @shagrir_on_marr) or *rational* (in the -->
+<!-- sense of ) approaches to episodic memory in -->
+<!-- general, and memory for text in particular. In general, computational or -->
+<!-- rational models are premised on the hypothesis that all aspects of cognition can -->
+<!-- be understood as adaptive solutions to computational problems posed by the -->
+<!-- environment. -->
+
+
+<!-- Thus, for example, @anderson:adaptive outlines a rational account of episodic memory that describes the principal computational problem being faced as the -->
+<!-- storage of information currently being experienced that may become relevant at -->
+<!-- some point in the future.  -->
+
+<!-- visual object recognition -->
+<!-- can be understood as a solution to the problem of determining the object in the -->
+<!-- world that is the cause of a given stimulus pattern on the retina . -->
+<!-- Likewise,  -->
+
+<!-- Applied to the problem of memory for texts, determining precisely -->
+<!-- what information in a text may be relevant requires a probabilistic model of -->
+<!-- the general statistical patterns across spoken and written language. -->
+<!-- Representing the information in a given text in terms of these patterns would -->
+<!-- identify precisely those that are likely to become relevant again at some point -->
+<!-- in the future.  -->

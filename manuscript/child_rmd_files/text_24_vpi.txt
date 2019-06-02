@@ -1,0 +1,7 @@
+0.31, objectives, goals, objective, achieve, goal, set, achieved, aims, means, aim
+0.12, conflict, conflicts, relationship, tensions, individual, relationships, situation, view, resolve, issue
+0.12, organisation, management, organisations, structure, authority, organisational, managers, responsibility, control, individual
+0.09, sentence, court, offenders, courts, criminal, prison, justice, offences, sentences, offence
+0.06, health, care, services, patients, service, practice, practitioners, authorities, practices, hospital
+0.05, health, care, medical, services, people, education, disease, illness, national, medicine
+0.03, punishment, death, penalty, capital, crime, corporal, penal, criminal, law, abolition

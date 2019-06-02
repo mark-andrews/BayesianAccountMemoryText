@@ -1,0 +1,424 @@
+In order to motivate the Bayesian model that we will develop, we begin with the
+premise, also shared by virtually all of the studies mentioned above, that the
+memory representation of a text is a representation of it semantic content.  We
+assume that, to a first approximation, the text's semantic content can be
+described by the set of *discourse topics* that are instantiated in the text,
+with each discourse topic being represented by a cluster of inter-related
+words. As an example, consider the following text:
+  
+  > *Despite the challenges associated with building up large-scale production, the*
+  > *Japanese are forging ahead in display technology — and for very good reasons.*
+  > *Obviously the straightforward replacement of bulky cathode ray tubes with flat*
+  > *panel display leads to significant power and weight reductions as exemplified in*
+  > *the commercialisation of laptop computers...*
+  
+\noindent It is clear that this text is about, roughly speaking, topics such as
+*industry*, *technology*, and so on.  Likewise, a topic such as *industry*
+could in general be exemplified by words like *plant*, *company*, *factory*,
+*production*, and many others, while a topic such as *technology* could in
+general be exemplified by words like *computer*, *electronics*, *engineering*,
+and many others.  In other words, we can describe any given text by identifying
+within it a set of discourse topics, taken from a potentially large set of
+discourse topics, with each of these discourse topics being characterized by a
+possibly large set of semantically inter-related words.  Each discourse topic,
+therefore, can be approximately identified by a cluster of semantically
+inter-related words.  Whenever we read or hear a text, we infer its discourse
+topics by recognizing different clusters of words, each of which signify
+different topics. These inferred topics then describe our representation of
+what the text is about.  On the basis of this representation, recall or
+recognition of items from the text is then essentially assessing whether any
+given item is compatible with, or typical of, the topics that have been
+inferred in the text.  For example, on the basis of the text above, there might
+be high probability of recognizing or recalling words such as *display* (which
+did occur) or *monitor* (which did not occur) because both are typical of some
+of the main inferred discourse topics.
+
+To put the foregoing description in somewhat more formal terms, we will denote
+the set of all possible discourse topics across spoken and written language by
+$\phi_1, \phi_2 \ldots \phi_k \ldots$, with each $\phi_k$ being,
+in general, a probability distribution over all words in the language. Given
+that these topics are essentially statistical patterns that characterize spoken
+and written language, they can therefore be inferred (or learned, acquired, etc.) 
+from a language corpus via Bayes's rule. In other words, if $\data$ is a language corpus, 
+using Bayes's rule, as we will explain,  we may infer 
+$$
+\Prob{\phi_1, \phi_2 \ldots \phi_k \ldots \given \data},
+$$
+which gives the probability distribution over the topics that characterize $\data$.
+Having learned the topics that characterise the language, 
+for any particular text, denoted by $\text{j}$, we can then infer, 
+again via Bayes's rule,
+$$
+\Prob{\pi_j \given \textj{j}},
+$$
+where $\pi_j$ is a probability distribution over the $K$ 
+discourse topics in the language. 
+This is equivalent to performing a
+statistical parse of the topics in the text, and leads to a representation of
+what the text is about in terms of a probability distribution over all possible
+topics. 
+Effectively, therefore, $\pi_j$ is the representation 
+of $\textj{j}$ in terms of the topics that characterize or typify it.
+Finally, on the basis of this memory representation, using Bayesian posterior
+predictive inference, we may predict which words are and are not typical or
+compatible with the text's inferred topics, and from this we can calculate the
+probability that any given word will, whether falsely or veridically, be recognized
+or recalled from the text.  Specifically, having inferred $\pi_j$, we may then calculate
+$$
+\Prob{w \given \textrm{text}_j} = 
+\int\! \Prob{w \given \pi_j} \Prob{\pi_j \given \text{j}}\ d\pi_j,
+$$
+which gives the probability distribution over the words that 
+are predicted or implied by the $\pi_j$ representation of $\text{j}$.
+
+This description provides the outline of a computational version of the general
+account of text memory mentioned above. We provide a schematic of this in
+Figure \ref{fig:schematic}b.  It also outlines formal or computational
+descriptions of the various details that remained vaguely described in the
+original account.  For example, according to this computational account, the
+necessary background knowledge for text memory is knowledge of statistical
+patterns in spoken and written language. We acquire knowledge of these patterns
+via Bayesian learning from the statistics of natural language. Our cognitive or
+memory representation of any given text is a representation of which topics are
+inherent in that text, and this is inferred using posterior inference using
+Bayes's rule. Finally, recognizing or recalling items from a text is based on
+posterior predictive inference of which words are or are not typical of the
+topics inferred in the text.
+
+## A Hierarchical Dirichlet Process Topic Model
+
+The Bayesian model described thus far assumes a probabilistic language model. In
+other words, it assumes that we have explicitly specified a probabilistic model
+that generates a language corpus, and one that does so specifically in terms of
+a set of component distributions $\Phi = \phi_1, \phi_2 \ldots \phi_K \ldots$,
+each of which is simply a probability distribution over a vocabulary of words.
+This language model, by definition, effectively provides a complete account of
+the probabilistic or statistical structure of language.  There are infinitely
+many probabilistic language models that we could employ here.  Some, such as
+those involving probabilistic grammars, focus on providing accurate descriptions
+of more fine-grained syntactic structures. Other probabilistic language models,
+such as *probabilistic topic models* [see, for example,
+@griffiths:psychrev;@steyvers2007probabilistic;@blei2012probabilistic;@blei03]
+have proved highly effective in capturing the statistical patterns that
+characterize the coarse-grained statistical structures across spoken and written
+language. Here, we use a type of probabilistic topic model known as a
+*hierarchical Dirichlet process topic model* (\hdptm)
+[@TehJorBea2004b;@teh:JASA].
+
+A \hdptm is a *bag of words* probabilistic language model.  According to a
+bag of words model, a language corpus $\data$ is a set of texts, where each text is an
+unordered set of words. In other words, within each text, all sequential or
+syntactic information is ignored and the only information that is used is which
+words occur and with what frequency. More formally, according to a bag of words
+model, the corpus of language data $\data$ is treated as a set of $J$ texts $\textj{1},
+\textj{2} \ldots \textj{j} \ldots \textj{J}$, where each $\textj{j}$ is a set of
+$n_j$ words from a finite vocabulary, represented simply by the $V$ integers
+$\{1, 2 \ldots V\}$. In other words, each $\textj{j} =
+w_{j1}, w_{j2} \ldots w_{ji} \ldots w_{jn_j}$, with each $w_{ji} \in \{1 \ldots
+V\}$, or $\data = \{w_{j1}, w_{j2} \ldots w_{ji} \ldots w_{jn_j}\}_{j=1}^J$.
+
+As a generative model of this corpus, the \hdptm treats each observed word
+$w_{ji}$ as a sample from one of infinitely many discourse topics $\phi_1,
+\phi_2 \ldots \phi_k \ldots$, where each $\phi_k$ is a probability distribution
+over $\{1 \ldots V\}$. Although each $\phi_k$ is a distribution over the entire
+vocabulary, because it will place most of its probability mass on a relatively small
+number of words, in effect it identifies a cluster of inter-related words that describe some 
+meaningful discourse topic (see examples of inferred topics on Page \pageref{tab:topics}).
+The identity of the particular topic distribution from which each $w_{ji}$ is
+drawn is determined by the value of a discrete latent variable $x_{ji} \in \{1,
+2 \ldots k \ldots\}$ that corresponds to $w_{ji}$. As such, we model each
+$w_{ji}$ as $$w_{ji}\vert x_{ji}, \phi \sim \dcat{\phi_{[x_{ji}]}},$$ where
+$\dcat{\cdot}$ denotes a categorical distribution. The probability distribution
+over these possible values of $x_{ji}$ is given by by $\pi_j$, which is a
+categorical distribution over the positive integers that is specific to text
+$\textj{j}$. In other words, $$x_{ji} \given \pi_j \sim \dcat{\pi_j}.$$ Each
+$\pi_j$, in turn, is assumed to be drawn from a Dirichlet process prior [see @ferguson1973bayesian]
+whose
+base distribution, $m$, is a categorical distribution over the positive integers
+and whose scalar concentration parameter is $a$: $$\pi_j\vert a,m \sim
+\ddp{a,m},$$ which is equivalent to
+$$\pi_{j1},\pi_{j2}\ldots\pi_{K},\textstyle\sum_{k > K} \pi_k\vert a,m \sim \ddirich{am_1,am_2\ldots am_K, a\textstyle\sum_{k > K} m_k },$$
+where $\ddirich{\cdot}$ is a standard Dirichlet distribution, which is a
+probability distribution over finite categorical distributions. In other words,
+the Dirichlet process prior over each $\pi_j$ is the infinite dimensional
+counterpart to a Dirichlet distribution over finite dimensional probability
+distributions. The $m$ base distribution of the Dirichlet process is assumed to
+be drawn from a stick-breaking prior [see @ishwaran2001gibbs] with a parameter
+$\gamma$: $$m\vert\gamma \sim \dstick{\gamma}.$$ A stick-breaking distribution
+is a probability distribution over infinite-dimensional categorical
+distributions, and is the infinite dimensional counterpart of the Generalized
+Dirichlet Distribution [@connor1969concepts]. The prior distributions of the
+Dirichlet process concentration parameter $a$ and the stick-breaking parameter
+$\gamma$ are Gamma distributions, both with shape and scale parameters equal to
+1. For the topic distributions, $\phi_1, \phi_2 \ldots \phi_k \ldots$, we can
+assume they are independently and identically drawn from a Dirichlet
+distribution with a length $V$ location parameter $\psi$ and concentration
+parameter $b$. In turn, $\psi$ is drawn from a symmetric Dirichlet distribution
+with concentration parameter $c$ 
+(i.e. $\psi\vert c \sim \ddirich{c\cdot \mathbf{1}_V}$, 
+where $c \cdot \mathbf{1}_V$ is a length $V$ vector with each element being $c$). 
+Finally, both $b$ and $c$, like $a$ and
+$\gamma$, can be given Gamma priors, again with shape and scale distributions
+equal to 1. The full specification of the \hdptm is provided in Figure \ref{fig:generative_model}.
+```{r schematic, child = 'generativemodel.Rmd'}
+```
+
+
+
+### Inference
+
+Given any corpus of natural language $\data$, 
+the posterior distribution over all the unobserved variables, which includes 
+all latent variables, parameters, and hyperparameters, 
+in the \hdptm is
+$$
+\begin{split}
+&\Prob{\vec{x}_{1:J}, \phi, \pi_{1:J}, \psi,  m, a, b, c, \gamma \given \data}\\
+&\phantom{\propto}\propto 
+\Prob{\psi\given c}\Prob{\pi_{1:J}\given a,m}\Prob{m\given\gamma}\Prob{b,c,a,m}
+\int\!\Prob{\data \given \vec{x}_{1:J}, \phi}\Prob{\vec{x}_{1:J} \given \pi_{1:J}}\Prob{\phi\given b, \psi} \ d\vec{x}_{1:J}d\phi
+\end{split}
+$$
+where $\vec{x}_{1:J} \doteq \{x_{j1}, x_{j2} \ldots x_{jn_j}\}^{J}_{j=1}$, 
+$\phi \doteq \phi_1, \phi_2 \ldots$, 
+$\pi_{1:J} \doteq \pi_1, \pi_2 \ldots \pi_j \ldots \pi_J$. We
+may draw samples from this high dimensional posterior distribution using a Gibbs
+sampler. We derived this sampler based on the work of @TehJorBea2004b, @teh:JASA,
+@newman2009distributed and we describe it in full technical detail in
+@andrews_2019.
+
+
+### Posterior predictive distributions
+
+Having inferred the posterior distribution of the unobserved variables in the \hdptm, 
+for any new text $\textj{{j^\prime}}$, 
+the posterior predictive distribution over the vocabulary conditioned on $\textj{{j^\prime}}$ is,
+informally speaking, the distribution over words that are consistent with the discourse
+topics of text $\textj{{j^\prime}}$. It is calculated as follows:
+$$
+\begin{aligned}
+\mathrm{P}(w \given \phi, \textj{{j^\prime}}, a, m) &= \int \mathrm{P}(w \given \phi, \pi_{j^\prime}) \mathrm{P}(\pi_{j^\prime} \given \textj{{j^\prime}}, \phi, a, m) d\pi_{j^\prime},\\
+&= \int \bigg[ \sum_{k=1} \mathrm{P}(w \given \phi, x=k)\mathrm{P}(x=k \given \pi_{j^\prime}) \bigg] \mathrm{P}(\pi_{j^\prime} \given \textj{{j^\prime}}, \phi, a, m) d\pi_{j^\prime}
+\end{aligned}
+$$
+where $\mathrm{P}(\pi_{j^\prime} \given \textj{{j^\prime}}, \phi, a, m)$ is the posterior
+distribution over topic distributions for text $\textj{{j^\prime}}$. 
+We can sample from the posterior $\Prob{\pi_{j^\prime} \given \textj{{j^\prime}}, \phi, a, m}$ 
+using a blocked Gibbs sampler that iterates the following two sampling steps:
+$$
+\begin{aligned}
+\vec{x}_{j^\prime} &\sim \Prob{\vec{x}_{j^\prime} \given \vec{w}_{j^\prime},\phi, \pi_{j^\prime}},\\
+\pi_{j^\prime} &\sim \Prob{\pi_{j^\prime} \given \vec{x}_{j^\prime}, a, m},
+\end{aligned}
+$$
+where $\vec{w}_{j^\prime} = w_{j^\prime 1}, w_{j^\prime 2} \ldots w_{j^\prime
+n_{j^\prime}} = \textj{{j^\prime}}$ and $\vec{x}_{j^\prime} = x_{j^\prime 1},
+x_{j^\prime 2} \ldots x_{j^\prime n_{j^\prime}}$. In the first step, we sample
+from the posterior distribution over the latent variables that correspond to the
+words in text $\textj{{j^\prime}}$. In the second step, we sample from the
+posterior distribution over $\pi_{j^\prime}$ given the values of
+$\vec{x}_{j^\prime}$ sampled in the previous step. The posterior distributions
+in both of these two steps can be calculated exactly.
+
+## Implementation and Simulations
+
+In order to explore and evaluate the model just described, we implemented it as
+a Python/Fortran program [@gustavproject:19.4.15] and trained it on a large
+representative corpus of natural language. The corpus was obtained by extracting
+paragraphs, or concatenations of consecutive paragraphs, of between 250 and 500
+words from the British National Corpus (\bnc) [@bnc]. After removing any texts
+that contained as sub-texts those texts that were used as the stimuli in the
+behavioural experiment (see next section), this resulted in a set of 183,975
+texts of between 250 and 500 words each, with a collective total of over 78
+million word tokens. After removing stop words, words that occurred less than 5
+times in total in the, and words that did not occur in a standard dictionary of
+English words[^standard_dictionary], there was a total vocabulary of 49,324 word types in the corpus.
+See Appendix A for details on the Python code used to create the corpus, and for
+how to obtain a copy of the corpus itself.
+
+[^standard_dictionary]: We used the `2of4brif.txt` word list 
+from the `12Dicts` collection of English word lists, available 
+at `http://wordlist.aspell.net/12dicts`.\label{footnote_standard}
+
+We trained the \hdptm using the corpus just described using the Gibbs sampler.
+This drew samples from posterior distribution over $\vec{x}_{1:J}, \phi,
+\pi_{1:J}, \psi,  m, a, b, c, \gamma$, for 20,000 iterations. After approximately 
+a few hundred iterations, 99\% of the posterior probability mass converged on
+approximately 1,340 topics. In other words, after a few hundred
+iterations
+$$
+\sum_{k=1}^{K=1340} m_{s_i} \approx 0.99,
+$$
+where $s_1, s_2 \ldots$ are the indices of the elements of $m$ sorted in
+decreasing order. Samples from iteration 19,000 to 20,000, thinning by a factor
+of 10, were then retained as the final set of posterior samples.
+Using these posterior samples, for each of held-out text $\textj{{j^\prime}}$, we 
+calculated the posterior predictive distributions as follows:
+$$
+\mathrm{P}(w \given \bar{\phi}, \textj{{j^\prime}}, \bar{a}, \bar{m}),
+$$
+where $\bar{\phi}$, $\bar{a}$, $\bar{m}$ are the means of the posterior samples of 
+$\phi$, $a$, $m$, respectively. 
+
+## How the Bayesian Model of Text Memory Works
+
+To reiterate, the contention of this paper is that the widely held, yet arguably
+vague and untestable, account of memory for text (see Figure
+\ref{fig:schematic}a) can be described formally as a Bayesian computational
+model (see Figure \ref{fig:schematic}b), and in practice we can instantiate this
+model using a \hdptm. Having described the \hdptm, we may now describe how it
+can act as a computational model of human memory for text. There are three main
+components to the model. First, there is the representation of the background
+knowledge that is relevant for constructing memory representations. Second,
+there is how this background knowledge is used, via Bayes's rule, to infer a
+representation of a text's semantic content. This is effectively the text's
+memory representation. Finally, having inferred the text's representation, the
+recognition or recall of the word's in the text is based on the posterior
+predictive distribution over words conditional of the text's represenation.
+
+The model assumes that background knowledge, or at least the background
+knowledge that is most relevant for inferring a text's semantic content, is
+represented by a large set of discourse topics $\phi_1, \phi_2 \ldots$. These
+are assumed to be learned over the course of our lives from experience with the
+statistics of spoken and written language, and are the Bayesian model's
+counterparts of the *schemata* or *scripts*, etc., in the widely held account of
+text memory. Examples of topics inferred by the \hdptm trained on the corpus
+described above are illustrated in Table \ref{tab:topics}. In each case, we
+display the 10 most probable words[^foot_displaying_topics] in each topic. In
+general in a \hdptm or any other probabilistic topic models, each topic often
+identifies some intuitively meaningful discourse topic that could perhaps be
+provided with a meaningful approximate label such as, for some of the examples
+shown, *university*, *home furniture*, *Northern Ireland*, and so on. Although
+there are in principle infinitely many topics in a \hdptm, in any given model,
+the posterior distribution will be concentrated on a relatively small number of
+topics. For any medium sized corpus of natural language, we would expect the
+posterior distribution to be concentrated on at least many hundreds, though
+possibly thousands, of topics like those shown in the table. In the simulations
+that we use in this paper, as mentioned above, approximately 99% of the
+posterior distribution over the topics is concentrated on around 1340 distinct
+topics.
+
+```{r, results='asis'}
+
+x_table <- read_csv('example_topics.txt', col_names = F) %>% 
+  as.matrix() %>% 
+  t() %>% 
+  .[, sample(ncol(.))] %>% 
+  matrix(nrow = 5 * 10, ncol = 7) %>% 
+  as.data.frame(row.names=F) %>% 
+  xtable(align='cccccccc',
+         label='tab:topics',
+         caption = 'Examples of topics inferred by the \\hdptm trained on the \\bnc.
+         In each case, the 10 most probable words in the topic are shown.
+         ')
+
+print(x_table, 
+      include.rownames=F,
+      include.colnames=F,
+      size="\\footnotesize\\selectfont",
+      floating = TRUE, 
+      table.placement = NULL,
+      latex.environments = "center",
+      hline.after = c(0,10,20,30,40,nrow(x_table)))
+
+
+
+
+```
+
+Having learned the repertoire of discourse topics, we can infer the probability distribution over the topics in any new text $\textj{{j^\prime}}$ using Bayes's rule: $\Prob{\pi_{j^\prime} \given \textj{{j^\prime}}, \phi, a, m}$.
+Here, $\pi_{j^\prime}$ is a probability distribution over all topics and can be
+seen as the semantic representation of text $\textj{{j^\prime}}$: it tells us
+which topics are instantiated in text $\textj{{j^\prime}}$ and with what
+probabilities. In other words, it provides a semantic parse of text
+$\textj{{j^\prime}}$ in terms of the repertoire of discourse topics. As an
+example, consider the following text.
+
+> *Individual goals may well be in conflict with organisational goals even where*
+> *there is a strong commitment to one goal by the organisation. It is worth*
+> *repeating that there may also be competing goals within the organisation itself.*
+> *Thus, for example, the prison service may wish to pursue the twin goals of the*
+> *punishment of offenders  and at the same time their rehabilitation. These two*
+> *goals may prove to be incompatible and yet each will have its supporters. Within*
+> *the National Health Service there may well be a commitment to provide the best*
+> *possible medical care that the state of medical knowledge will allow and yet*
+> *this may be tempered by the requirement to act within tight financial*
+> *constraints. The two goals may be in conflict. Many organisations will face the*
+> *problem of which goals to prioritise in the light of competing goals.*
+
+\noindent Using the averages of the samples of the posterior of $\phi$, $a$,
+$m$, which we'll denote by $\bar{\phi}$, $\bar{a}$, and $\bar{m}$, respectively,
+we can then draw samples from $\Prob{\pi_{j^\prime} \given \textj{{j^\prime}},
+\bar{\phi}, \bar{a}, \bar{m}}$, the average of which we'll denote by
+$\bar{\pi}_{j^\prime}$. In the following table, we show the 7 most probable
+topics and their probabilities. 
+
+\setlength{\parindent}{0pt}
+
+```{r, results='asis'}
+x_table <- read_csv('text_24_vpi.txt', col_names = F) %>% 
+  as.matrix() %>% 
+  t() %>% 
+  as.data.frame(row.names=F) %>% 
+  xtable(align='cccccccc')
+
+cat('\\begin{center}',
+print(x_table, 
+      include.rownames=F,
+      include.colnames=F,
+      comment = F,
+      print.results = F,
+      size="\\footnotesize\\selectfont\\noindent",
+      floating = FALSE, 
+      table.placement = NULL,
+      latex.environments = "center",
+      hline.after = c(0,1,nrow(x_table))
+),
+'\\end{center}')
+
+```
+\noindent This shows that this text is represented as being about a mixture of topics,
+including those that might be labelled *objectives* (with probability 0.31), *conflict* (0.12),
+*organization* (0.12), and so on. 
+
+\setlength{\parindent}{30pt}
+
+Finally, having inferred the distribution over the topics of text
+$\textj{{j^\prime}}$, the recognition or recall of words from this text is based
+on the posterior predictive distribution over words conditional on
+$\pi_{j^\prime}$. If $\tilde{\pi}^1_{j^\prime}, \tilde{\pi}^2_{j^\prime},
+\ldots \tilde{\pi}^t_{j^\prime} \ldots \tilde{\pi}^t_{j^\prime}$ are $T$ samples from
+the posterior distribution $\Prob{\pi_{j^\prime} \given \textj{{j^\prime}}, \bar{\phi}, \bar{a}, \bar{m}}$, then the posterior predictive distribution over the vocabularly is given by the following.
+$$
+\begin{aligned}
+\mathrm{P}(w \given \bar{\phi}, \textj{{j^\prime}}, \bar{a}, \bar{m}) 
+&\approx
+\frac{1}{T}\sum_{t=1}^T \mathrm{P}(w \given \bar{\phi}, \tilde{\pi}^t_{j^\prime}),\\
+&= \frac{1}{T}\sum_{t=1}^T \bigg[\sum_{k=1} \mathrm{P}(w \given \bar{\phi}, x=k)\mathrm{P}(x=k \given \tilde{\pi}^t_{j^\prime})\bigg]
+\end{aligned}
+$$
+\noindent Illustrations of posterior predictive distributions for some example
+held out texts, which we then use in the behavioural experiments described next,
+are show in Figure \ref{fig:wordclouds}. In each case, the posterior predictive
+distribution is a distribution over the entire vocabulary of words, and tells us
+how much any given word is compatible with, or typical of, the topic-based
+representation of the text. From this distribution, we have a model of what
+words will and will not, whether veridically or falsely, from any given text.
+
+
+```{r introduction, child = 'wordcloud.Rmd'}
+```
+
+
+
+
+<!-- [^prob-of-vpi]: Given that $\pi_{j^\prime}$ is a probability distribution over all topics, -->
+<!-- the posterior distribution is a probability distribution over $\pi_{j^\prime}$. -->
+
+[^foot_displaying_topics]: While each topic is always defined by a probability
+distribution over the entire vocabulary of $V$ words, in most topics the
+probability mass is concentrated on a relatively small subset of words, and this
+allows us to illustrate topics by displaying only their most probable words.
+
+
+

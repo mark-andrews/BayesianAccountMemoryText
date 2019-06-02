@@ -1,0 +1,1451 @@
+In order to properly evaluate this Bayesian account of memory, we will assess
+how well this model can predict participants' recognition and recall of words
+from everyday texts. Specifically, we will use randomly selected texts from the
+\bnc that particpants read at a normal reading pace, after which their memory is
+tested using either a recognition or recall test. We then can statistically
+evaluate how well the Bayesian model predicts what participants do and do not
+remember, whether veridicaly or falsely, from these texts.
+
+
+## Method
+
+In overview, in this experiment, each participant read a number of separate
+texts, which were randomly selected from a pool of different texts. After
+reading each text at normal reading pace, and after a 1 minute filler task, they
+were then given either a recognition or a recall memory test.
+
+### Design and sample size determination
+
+The purpose of the experiment was to obtain sufficient behavioural data to
+thoroughly test the predictions of the Bayesian model (as well as alternative
+models for the purposes of comparison; see below). Prior to collecting any data,
+we conducted numerical simulations to determine the total number of
+participants, the total number of different memory tests (i.e., different texts
+followed by recognition or recall tests), and the number of memory tests that
+any one participant should perform. These simulations demonstrated that to
+obtain a high probability of detecting the true predictive effect of the model,
+even if it is assumed to have a low effect size, we required at least 150
+participants, at least 50 separate tests, but that each participant need perform
+only three separate tests. These simulations are described in more detail in
+Appendix \ref{app:sample_size_determination}.
+
+### Participants
+
+```{r, include=FALSE}
+
+# Get list of some summary stats from behavioural experiment, 
+# attach to global environment
+list2env(get_behavioural_experiment_summary_stats(Df_recognition = Df_recognition,
+                                                  Df_recall = Df_recall),
+         .GlobalEnv
+)
+
+```
+
+A total of `r n_subjects` participants (`r gender_counts['Female']` female, 
+`r gender_counts['Male']` male; the median age was `r age_stats['median']`, with
+95% of participants having ages between `r age_stats['lower']` and 
+`r age_stats['upper']`) took part in the experiment. Participants were recruited on
+an entirely voluntary basis from the student population at Nottingham Trent
+University and elsewhere, with the only restriction being that they be native
+English speakers.
+
+### Materials
+
+A total of 50 texts were used as the to-be-memorized materials in the memory
+experiment. These were randomly sampled from the \bnc subject to the constraint that
+they were between 140 and 160 words in length, had a high density (over 90%) of
+words from a standard dictionary of English words (see Footnote
+\ref{footnote_standard}), and had a relatively high density (over 75%) of words
+that occurred as stimulus words in the *Small World of Words* word association
+norms[^swow]. We required texts that had a high density of words from a standard
+dictionary of English words in order to avoid texts on obscure topics with many
+jargon terms. We required texts with relatively high density of words from the
+word association norms for purposes of comparing the predictions of the Bayesian
+model to that of models based on word associations. We will return to this in
+detail below.
+
+[^swow]: https://smallworldofwords.org/en/project/home
+
+For each of the 50 texts, we produced a recognition memory test word list
+consisting of 20 words. Of these 20 words, 10 occurred in the text (we will call
+these the *target words*) and 10 did not (we'll call these the *lure* words).
+The 10 target words were the 10 words in the text that had the highest
+term-frequency by inverse document frequency (\tfidf) values. Using \tfidf
+values is a simple and widely used method to extract keywords from a
+text[^tfidf]. For the lure words, it is necessary to use words that are not
+trivially easy to dismiss as not being in the text, as this would largely
+invalidate the recognition test. To avoid this, the 10 lure words were the 10
+words in adjacent paragraphs to the text that had the highest \tfidf scores,
+after removing any words that were in the text iself. In other words, given any
+text, we obtain the paragraph before and after this text as it occurs in the
+\bnc. We then found the words with the 10 highest \tfidf scores in these two
+paragraphs combined, after removing any words that occured in the target text.
+Given that neighbouring paragraph will usually be semantically related to the
+text, these lure words will usually be a set of words that are semantically
+related to the text, though do not occur in it.
+
+[^tfidf]: Informally speaking, words with high \tfidf values are frequent in the
+text but do not occur frequently in all texts. More precisely, for any word
+$w_i$, its \tfidf value is $f_i \log(N/n_i)$, where $f_i$ is its raw frequency
+count in the corpus as a whole, $n_i$ is number of documents in the corpus where
+word its occurs at least once, and $N$ is the total number of documents in the
+corpus.
+
+
+
+### Procedure
+
+\begin{figure}
+	\centering
+	\includegraphics[width=\textwidth]{child_rmd_files/task_diagram.pdf}
+	\caption{The task diagram of one block in the experiment: Participants
+		read a randomly assigned text, performed a filler task, and then
+		had their memory tested using either a recognition or recall
+		test, with the test type being randomly chosen. 
+		This process is repeated three times for each participant.}
+	\label{fig:task_diagram}
+\end{figure}
+
+For each participant, each experiment session proceeded as follows (see Figure
+\ref{fig:task_diagram} for the task diagram of the experiment). After initial
+information and instructions, which informed participants that they would be
+engaging in memory tasks, one of the sample texts appeared on screen.
+Participants were instructed to read this text at their normal reading.  The
+text stayed on screen for a maximum of 90 seconds, but after 45 seconds,
+participants were able to move on the next screen if they so wished. On the
+following screen participants were asked to play the computer game *Tetris* for
+exactly 60 seconds. At the completion of the game, participants proceeded to the
+memory task. For each participant and for each text, the memory test was
+randomly chosen to be either a recognition or a recall task. For the recognition
+test, the 20 test items were presented on screen, one word at a time, with an
+inter-stimulus-interval of 2 seconds. They remained on screen for 5 seconds or
+until the subject indicated with a button press whether the word shown was
+*present* or *absent* from the text. No feedback was given after each response.
+If the participant was assigned to the recall test, a screen of a list of small
+empty text boxes was presented where and they were asked to type as many words
+as they could remember, one word into each text box. Initially, 10 empty texts
+boxes were presented, and more boxes could be added with a button press. Upon
+completion of the memory test, participants were given the option of pausing or
+proceeding to the next test. Each participant performed up to three tests in
+total, with the three texts to which they were assigned being always randomly
+sampled from the set of 50 texts. 
+
+As participants were not compensated or
+otherwise provided incentives to complete all three experimental sessions, not
+all `r n_subjects` participants completed three sessions. In total, 
+across all `r n_subjects` participants, there were `r n_sessions` separate memory test sessions. 
+Of these `r n_sessions` separate tests, 
+`r n_recognition_sessions` were recognition memory tests (performed by `r n_recognition_subjects` participants), 
+and `r n_recall_sessions` were recall memory tests 
+(performed by `r n_recall_subjects` participants). In general, the
+average number of tests done per participant was 
+`r round(sessions_per_subject, 1)` sessions.
+
+All experiment sessions were presented using the *Wilhelm* web-browser
+based experiment presentation software [@wilhelmproject:19.4.19] that was hosted at
+\textit{http://www.cognitionexperiments.org}.  This software allowed the
+experiment to be done on any web-browser based device, e.g., phones, tablets,
+laptops and desktops.
+
+
+## Comparison Models
+
+To meaningfully evaluate the Bayesian model's predictions, 
+it is necessary to compare them 
+to those of nontrivial alternative models. 
+In particular, we will compare the predictions of the Bayesian model 
+to predictions made by two *associative* models of text memory. 
+Both of these models predict that the words 
+that are remembered, whether falsely or veridically, from any given text 
+are those that are most associated, 
+on average, with the text's content. 
+In other words, they predict that 
+what we do an do not remember from a
+text is based on the average associative
+strength between the words in the text and any other word. 
+For example, consider the text from which the following 
+fragement is taken
+(displayed at greater length in Figure \ref{fig:wordclouds} 
+on Page \pageref{fig:wordclouds}):
+
+ > *Some social scientists have conceptualised these*
+ > *workers in terms of a reserve*
+ > *army of labour. In this case,* 
+ > *they would constitute a pool of labour which can*
+ > *be utilised in boom periods and*
+ > *disregarded in recessions. This view sees the*
+ > *experience of the Third world* \ldots\ldots
+  
+\noindent According to the associative account of text memory, if words like
+*military*, *economic*, or *labour*, for example, are highly associated, on
+average, with words in this text, they have a high probability of being
+remembered after reading it. Of course, if either of *military*, *economic*, or
+*labour*, are not, in fact, in the text, then memories of these words would
+obviously be false memories. This account is precisely the dominant explanation
+of the Deese-Roediger-McDermott (\drm) effect of false memories from word lists:
+the word list's so-called *critical lure* word is falsely remembered, according
+to the dominant account [see,
+@roediger:jep;@roediger:recall_rates;@schacter2011memory;@gallo2013associative, and elsewhere]
+because it is highly associated with other words in the list, even though is not
+present itself. More generally, this dominant account holds that 
+the false memory of the critical lure is merely an accidental byproduct of how memory works normally, which is by forming and remembering associations based on what we read or hear [see @roediger2000tricks;@gallo2010false]. 
+Although the \drm effect applies to word lists, 
+its dominant explanation can arguably be extended to memory for texts as well
+[see @dewhurst2007story; @howe2011using].
+
+Association based models are very appropriate choices of models to which we can compare
+the Bayesian model. On the one hand, they are not trivial or theoretical
+strawmen models. As just mentioned, they are in fact used as the dominant
+explanation of highly related memory phenomenon to the one at hand. On the other
+hand, they are theoretically distinct from the knowledge based accounts of text
+memory of which the Bayesian model is a computational implementation. The main
+distinction between knowledge based accounts of memory and associationist ones
+is that the former memories are ultimately based on the meaning of text, while
+in the latter they are based on *meaning*less associations [@reyna2016fuzzy].
+
+Associative accounts of text memory may be operationalized in different ways.
+Here, we use two operationalisations that differ depending on the precise
+definition of "association". One approach defines association in terms of
+statistical coccurrences of words in spoken and written language. Another
+approaches defines association in terms of word association norms.
+
+The statistical co-occurrence probability of two words, $w_k$ and $w_l$, which
+we will denote $\Probc{w_k, w_l}$, is defined as the empirical probability
+of observing word $w_k$ and $w_l$ in the same text in the language. Here, we calculate $\Probc{w_k, w_l}$
+using the same \bnc corpus as was used above. From this, we can calculate 
+\[
+	\Probc{w_k \given w_l} = \frac{\Probc{w_k, w_l}}{\Probc{w_l}},
+\]
+which is the conditional probability of observing $w_k$ in any text given that $w_l$ has been observed. From this, if text 
+$\textj{{j^\prime}} = w_{j^\prime 1}, w_{j^\prime 2} \ldots w_{j^\prime n_{j^\prime}}$, the predicted association probability of word $w_k$ according to $\textj{{j^\prime}}$ is
+\begin{equation}
+\label{eq:probc_w_text}
+	\Probc{w_k \given \textj{{j^\prime}}} 
+	=\frac{1}{n_{j^\prime}} \sum_{i=1}^{n_{j^\prime}} \Probc{w_k \given w_{{j^\prime}i}}.
+\end{equation}
+We can interpret this value intuitively as the average association between
+$w_k$ and $\textj{{j^\prime}}$, with association defined in terms of statistical
+co-occurrences in the language.
+
+An alternative means to calculate the average association between $w_k$ and
+$\textj{{j^\prime}}$ is using word association norms,
+rather than statistical co-occurrences. If $A_{kl}$ is the frequency that word $w_k$ is stated as associated with word $w_l$,
+then the conditional probability of word $w_k$ given $w_l$ is 
+$$
+\Proba{w_k \given w_l} = \frac{A_{kl}}{\sum_{i=1}^V A_{il}},
+$$
+where $V$ is the total number of words in our vocabulary of response words.
+Now, given $\textj{{j^\prime}} = w_{j^\prime 1}, w_{j^\prime 2} \ldots w_{j^\prime n_{j^\prime}}$, we can calculate
+\begin{equation}
+\label{eq:proba_w_text}
+	\Proba{w_k \given \textj{{j^\prime}}} = \frac{1}{n_{j^\prime}} \sum_{i=1}^{n_{j^\prime}} \Proba{w_k \given w_{{j^\prime}i}},
+\end{equation}
+which we can interpret as the average association between $w_k$ and
+$\textj{{j^\prime}}$, with association now defined in terms of word association
+norms rather than statistical co-occurrences. Though a large set of English word
+association norms are available from the widely used Nelson norms [e.g.,
+@nelson:norms], we used an even larger set that is a pre-release of the English
+\textit{small world of words} association norms [@swow]. This provides word
+associates, produced by 101,119 participants, to 10,050 word types. For more
+information on how we calculated the predictions according to these associative
+models, including links to all the source code that was used, see Appendix
+\ref{app:open_science}.
+
+
+
+## Results
+
+<!-- Summarize the recognition test results -->
+
+We begin by analysing the recognition memory test data. In each recognition test, 
+the participant was presented 
+with a list of `r recognition_test_list_length` words, 
+shown one word at a time.
+Their task was to judge whether each word was 
+either present or absent in the text 
+that they had just read. Across all tests, 
+the average response rate was `r 100*round(hit_rate, 2)`%, 
+and the average accuracy was `r 100*round(accuracy_rate, 2)`%, 
+with the false positive rate being `r 100*round(false_positive_rate, 2)`% 
+(with over `r floor(100*false_positive_rate_gt_10pc)`% 
+of the `r n_recognition_sessions` tests having a false positive rate greater than 10%), 
+and the false negative rate being `r 100*round(false_negative_rate, 2)`%
+(with over `r floor(100*false_positive_rate_gt_10pc)`% of tests having a false negative rate greater than 10%).
+
+The primary aim of our analysis is to evaluate 
+how well each of our three computational models 
+of memory predict the recognition memory responses. 
+To begin, we label the entire set of responses 
+as $y_1, y_2 \ldots y_n$,
+where $n$ is the total number of recognition 
+test trials across all separate tests and all participants.
+Each $y_i$ takes on the value of either $0$ or $1$, 
+where $y_i = 0$ means that the participant on trial $i$ 
+judged the word shown on that trial, which we label $w_i$, 
+to not have been present in the preceding text,
+while if $y_i = 1$, 
+the participant judged $w_i$ 
+to have been present in the preceding text. 
+For each trial $i$, 
+we also have $s_i \in 1\ldots `r n_subjects`$ 
+and $t_i \in 1 \ldots `r number_of_recognition_tests`$, 
+which identify the participant and the memory test, 
+respectively, corresponding to the $i$th observation. 
+In addition, 
+we have three predictors of the value of $y_i$,
+namely 
+$\psibayes_{(t_i, w_i)}$, 
+$\psicooccur_{(t_i,w_i)}$, 
+and $\psiassoc_{(t_i,w_i)}$. 
+These give the predicted probability 
+that $w_i$ was in the text of memory test $t_i$ 
+according to the Bayesian, 
+the Cooccurrence, 
+and the Associative models, respectively. 
+Naturally, if any one of these predictors is 
+predictive of the behavioural responses, 
+the higher its value, 
+the higher the probability that $y_i = 1$, 
+and the lower its value, the higher the probability that $y_i = 0$. 
+
+
+### Recognition memory data: Exploratory analyses
+
+```{r, include=FALSE}
+recognition_preliminary_results <- get_recognition_preliminary_results(Df_recognition, eps=0.1)
+```
+
+```{r, include=FALSE}
+exploratory_data_analysis_fig_recognition_fname <- 'tmp/exploratory_data_analysis_panel_figure.tex'
+exploratory_data_analysis_fig_recognition_label <- 'fig:exploratory_data_analysis_panel_figure'
+
+exploratory_data_analysis_fig_recognition_caption <- "
+  a) Scatterplots of the empirical probability of recognizing each word
+  against the normalized log of the recognition probabilities, denoted by $\\phi$,
+  according to each computational model. For each computational model, we 
+  chose a representative test (see main text for explanation). 
+  In each scatterplot, each point represents a test word, and we distinguish
+  between words that were, and were not, in the text by colour.
+  b) Tukey boxplots showing the distribution of the $R^2$ values
+  of the linear regression models predicting, separately for each test, the
+  empirical recognition probabilities
+  as a function of normalized log of the recognition probabilities according to each computational model
+  and whether the word was present or not in the corresponding text.
+  c) Tukey boxplots showing the distribution of Spearman's $\\rho$ 
+  coefficients between the
+  empirical recognition probabilities and the normalized log of each model's recognition probabilities. 
+  In this case, for each test, we calculate $\\rho$ 
+  separately for the set of test words there were, and were not, in the memory test's text.
+"
+
+# Create figures for a panel plot 
+
+p1 <- recognition_preliminary_results$Df_rsquared %>% 
+  ggplot(mapping = aes(x=model, y=r_squared, col=model)) +
+  geom_boxplot(width=0.2, outlier.shape = NA) +
+  geom_jitter(width = 0.1, size=0.25, fill=NA) +
+  theme_classic() + 
+  ylim(0, 1) +
+  scale_color_brewer(palette='Dark2') +
+  coord_fixed(ratio = 1.0) +
+  theme(legend.position="none") +
+  ylab('$R^2$') +
+  scale_x_discrete(name = NULL, 
+                   limits=c("bayes","cooccur","assoc"),
+                   labels=c("bayes" = 'Bayesian', 
+                            "cooccur" = 'Cooccurrence',
+                            "assoc" = 'Associative')) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        plot.margin=margin(t=-3, unit="cm"))
+
+
+p2 <- recognition_preliminary_results$Df_spearman %>% 
+  ggplot(mapping = aes(x=model, y=correlation, col=model)) +
+  geom_boxplot(width=0.2, outlier.shape = NA) +
+  geom_jitter(width = 0.1, size=0.15, alpha=0.5, fill=NA) +
+  theme_classic() + 
+  ylim(-1, 1) +
+  scale_color_brewer(palette='Dark2') +
+  coord_fixed(ratio = 1.0) +
+  theme(legend.position="none") +
+  ylab('$\\rho$') +
+  scale_x_discrete(name = NULL, 
+                   limits=c("bayes","cooccur","assoc"),
+                   labels=c("bayes" = 'Bayesian', 
+                            "cooccur" = 'Cooccurrence',
+                            "assoc" = 'Associative')) +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5),
+        plot.margin=margin(t=-3, unit="cm"))
+
+p3 <- recognition_preliminary_results$prototypical_scatterplots_data %>%  
+  ggplot(mapping = aes(x = phi, y = response, col = expected)) +
+  geom_point() +
+  stat_smooth(method='lm', se=F, size=0.5) +
+  facet_wrap(~model, 
+             ncol = 3, 
+             strip.position = 'bottom',
+             labeller = as_labeller(c(bayes = "$\\phi^\\text{Bayesian}$", 
+                                      cooccur = "$\\phi^\\text{Cooccurrence}$", 
+                                      assoc = "$\\phi^\\text{Associative}$"))
+  ) +
+  theme_classic() + 
+  scale_color_manual(values=c("#999999", "#E69F00", "#56B4E9"),
+                     name  = "test word in text:   ",
+                     breaks=c("FALSE", "TRUE"),
+                     labels=c("no", "yes")) +
+  coord_fixed(ratio = 3) +
+  xlab(NULL) +
+  ylab('$\\mathrm{P}(y_i = 1)$') +
+  theme(legend.position = "top", 
+        legend.background = element_rect(color = NA, fill = NA, size = 1, linetype = "solid"), 
+        legend.direction = "horizontal",
+        strip.background = element_blank(),
+        strip.placement = "outside",
+        axis.title.y = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
+  )
+
+ann_text <- data.frame(phi = -1,
+                       response = 1,
+                       expected = T,
+                       model = factor('bayes', levels = c("bayes","cooccur","assoc")))
+
+p3 <- p3 + geom_text(data = ann_text, col='black', 
+                     label = sprintf('Test %d', recognition_preliminary_results$Df_rsquared_which_median['bayes']), 
+                     size=3)
+ann_text[1,'model'] <- 'cooccur'
+p3 <- p3 + geom_text(data = ann_text, col='black',
+                     label = sprintf('Test %d', recognition_preliminary_results$Df_rsquared_which_median['cooccur']),
+                     size=3)
+ann_text[1,'model'] <- 'assoc'
+p3 <- p3 + geom_text(data = ann_text, col='black', 
+                     label = sprintf('Test %d', recognition_preliminary_results$Df_rsquared_which_median['assoc']),
+                     size=3)
+
+tikz(file=exploratory_data_analysis_fig_recognition_fname,
+     standAlone = F,
+     width = textwidth_in_inches)
+
+plot_grid(p3, 
+          plot_grid(p1, p2, align='vh', labels = c('b', 'c'), vjust = -1.0),
+          rel_heights = c(1, 1),
+          labels = c('a', ''), vjust = 5,
+          nrow = 2)
+
+dev.off()
+clip_tikz_bounding_box(exploratory_data_analysis_fig_recognition_fname)
+```
+
+```{r, results='asis'}
+cat('\\begin{figure}[!htb]',
+    sprintf('\\input{child_rmd_files/%s}', exploratory_data_analysis_fig_recognition_fname),
+    paste0('\\caption{', exploratory_data_analysis_fig_recognition_caption,'}'),
+    sprintf('\\label{%s}', exploratory_data_analysis_fig_recognition_label),
+    '\\end{figure}', 
+    sep='\n')
+```
+We begin by exploring how well the probabilities
+according to each memory model correspond to 
+the probabilities of recognizing the words in each memory test.
+First, separately for each test, 
+we calculate the empirical probability 
+that each test word therein is recognized, 
+whether veridically or falsely.
+This is simply the relative frequency
+with which the participants respond that the word 
+is present in the text that they just read. 
+More precisely, the empirical probability of 
+recognizing test word $v$ in memory test $j$ is
+$$
+q_{vj} =   \frac{\sum_{\{i \colon w_i = v, t_i = j\}} y_i}{n_{vj}}
+$$
+where $n_{vj}$ is the total number of 
+trials where the test word is $v$ 
+and the memory test is $j$.
+In Figure&nbsp;\ref{`r exploratory_data_analysis_fig_recognition_label`}a, 
+we provide scatterplots 
+of the relationship between these empirical recognition probabilities 
+and the normalized 
+(i.e., mean = 0, standard deviation = 1) logarithm 
+of the probability according to each of the three memory models. 
+In each case, we use a different 
+representative (see below for explanation)
+memory test to construct the scatterplot. 
+Specifically, we use test 
+`r recognition_preliminary_results$Df_rsquared_which_median['bayes']` 
+with the Bayesian model's probabilities,
+test `r recognition_preliminary_results$Df_rsquared_which_median['cooccur']` 
+with the Cooccurrence model,
+and test `r recognition_preliminary_results$Df_rsquared_which_median['assoc']` 
+with the Associative model. 
+Note that in each scatterplot, there are `r recognition_test_list_length` points, 
+with each one representing a test word in the memory test. 
+Words that had, 
+versus had not, 
+appeared in the corresponding text are distinguished from one another by colour.  
+Next, separately for each of the three models, 
+and for each of the `r number_of_recognition_tests` memory tests,
+we fit a linear regression model 
+using the empirical recognition probability as the outcome variable
+and the normalized log of the probability according to the memory model as the predictor, 
+and with a binary covariate that indicates if the word was in fact in the text or not. 
+More precisely,
+using $\phi^k_{(j,v)}$, for $k \in 1, 2, 3$, to signify the normalized logarithm of 
+$\psibayes_{(j, v)}$, 
+$\psicooccur_{(j,v)}$, 
+and $\psiassoc_{(j,v)}$, respectively, and 
+for each memory test $j$, we fit the following linear model,
+$$
+q^k_{vj} = \beta_0 + \beta_1 \phi^k_{(j,v)} + \beta_2 z_{jv} + \epsilon_{jv},
+\quad \epsilon_{jv} \sim N(0, \sigma^2),
+\quad \text{for each test word $v$ in memory test $j$},
+$$
+where $z_{jv}$ signifies if test word $v$ was present in the text corresponding to test $j$.
+The $R^2$ values for all of these regression 
+models are displayed in the Tukey boxplots in Figure&nbsp;\ref{`r exploratory_data_analysis_fig_recognition_label`}b.
+The median $R^2$ values for the 
+Bayesian, 
+Cooccurrence, 
+and Associative models
+are `r round(recognition_preliminary_results$Df_rsquared_median['bayes'], 3)`,
+`r round(recognition_preliminary_results$Df_rsquared_median['cooccur'], 3)`,
+and `r round(recognition_preliminary_results$Df_rsquared_median['assoc'], 3)`,
+respectively. 
+These median values occur with test `r recognition_preliminary_results$Df_rsquared_which_median['bayes']` 
+using the Bayesian model's probabilities,
+test `r recognition_preliminary_results$Df_rsquared_which_median['cooccur']`
+using the Cooccurrence model,
+and test 
+`r recognition_preliminary_results$Df_rsquared_which_median['assoc']` 
+using the Associative model. Hence our choice of scatterplots in 
+Figure&nbsp;\ref{`r exploratory_data_analysis_fig_recognition_label`}a.
+Clearly, the $R^2$ values displayed in Figure&nbsp;\ref{`r exploratory_data_analysis_fig_recognition_label`}b
+give the amount of variation explained in the empirical recognition probabilities by 
+knowing both the probabilities according to each model and also whether the word occurred in each text.
+In order to isolate the relationship between 
+the empricial recognition probabilities and 
+the models' predictions, 
+for each model and each test,
+we calculate the Spearman's $\rho$ correlation coefficient
+separately for the set of `r recognition_test_list_length/2` words
+that were, and were not, in the text corresponding to the test. 
+For each model, we display all the values of these Spearman's $\rho$ coefficients
+in the Tukey boxplots in Figure&nbsp;\ref{`r exploratory_data_analysis_fig_recognition_label`}c.
+The median $\rho$ values for the 
+Bayesian, 
+Cooccurrence, 
+and Associative models
+are `r round(recognition_preliminary_results$rho_median['bayes'], 3)`,
+`r round(recognition_preliminary_results$rho_median['cooccur'], 3)`,
+and `r round(recognition_preliminary_results$rho_median['assoc'], 3)`,
+respectively. 
+
+
+### Recognition memory data: Multilevel logistic regression analyses
+
+We will now more thoroughly analyse how well the memory models predict the human recognition data.
+To begin, 
+if any of the models is predictive of the behavioural responses, 
+the log odds that $y_i = 1$ should rise 
+as a linear function of the logarithm of the predictor. 
+As such, we can model how well any or all of these predictors 
+predict the behavioural responses using a binary logistic regression 
+with the logarithm of $\psibayes$, 
+$\psicooccur$, and $\psiassoc$ as predictors.
+
+In general, how well any predictor predicts the probability that 
+the participant will respond that $y_i = 1$ 
+may vary randomly across participants, 
+simply due to individual differences across participants. 
+We refer to these as subject-level random effects. 
+Likewise, how well a predictor predicts the response 
+may vary randomly across different memory tests. 
+For example, the predictors may be better or worse with some texts and not others. 
+We refer to these as text-level random effects.
+In addition, 
+there should also be word-level random effects 
+given that some individual words may always be 
+more or less memorable than others, 
+regardless of context. 
+Finally, we should also expect that, 
+if $w_i$ was in fact present in the preceding text, 
+there should be a higher probability of responding that $y_i = 1$.
+This is simply saying that,
+on average,
+we should be more likely to correctly recognize words
+that were in fact in the text than 
+to falsely recognize words that were not there. 
+
+Accordingly, we will use the following multilevel binary logistic regression 
+to model how the probability that 
+$y_i = 1$ varies as a function of the logarithm of the models' predictors:
+\begin{equation}
+\label{eq:full_recognition_model}
+\ln\left(\frac{p_i}{1-p_i}\right) =
+\beta^0_i +
+\sum_{k=1}^{3} \beta^k_i \phi_{(t_i, w_i)}^{k} +
+z_i\left(\beta^4_i + \sum_{k=1}^{3} \beta^{4+k}_i \phi_{(t_i, w_i)}^{k}\right) + \zeta_{w_i}, 
+\quad\text{for each $i \in 1,2 \ldots n$.}
+\end{equation}
+Here, $p_i$ signifies the probability that $y_i = 1$. 
+The predictor $z_i$ is a binary variable 
+indicating whether $w_i$ was present in preceding text.
+The predictor variables 
+$\phi^1_{(t_i, w_i)}$, 
+$\phi^2_{(t_i, w_i)}$, 
+$\phi^3_{(t_i, w_i)}$ are the normalized 
+(i.e., re-scaled to have a mean of zero and standard deviation of 1 over all $i$) 
+natural logarithms of
+$\psibayes_{(t_i, w_i)}$, 
+$\psicooccur_{(t_i, w_i)}$, 
+and $\psiassoc_{(t_i, w_i)}$, 
+respectively. 
+The coefficients $\beta^0_i, \beta^1_i \ldots \beta^7_i$ are each defined as follows:
+$$
+\beta^l_i = \gamma^{l}_{s_i} + \xi^{l}_{t_i}, \quad\text{for each $l \in 0,1 \ldots 7$.}
+$$
+Here, $\gamma^l_{s_i}$ signifies the subject-level random coefficient, 
+and $\xi^l_{t_i}$ is the text-level random coefficient. 
+These effects are normally distributed. 
+In particular, 
+for each $l \in 0,1 \ldots 7$, 
+and for each subject $s_i$, 
+$\gamma_{s_i}^l \sim N(\mu_\gamma^l, \tau^l_\gamma)$. 
+Likewise, 
+for each $l \in 0,1 \ldots 7$, 
+and for each text $t_i$, 
+$\xi_{t_i}^l \sim N(\mu_\xi^l, \tau^l_\xi)$. 
+Finally,
+$\zeta_{w_i}$ is a word-level random effect,
+which is also normally distributed. 
+For each word $w_i$, 
+$\zeta_{w_i} \sim N(\mu_\zeta, \tau_\zeta)$.
+Note that this model is a conventional multilevel logistic regression model 
+with fixed and random effects, 
+yet it is presented in a more compact form than usual[^footnote_explaining_multilevel_model]. 
+
+[^footnote_explaining_multilevel_model]: Its standard form is clear 
+if we substitute each $\beta^l_i$
+with 
+$\gamma^{l}_{s_i} + \xi^{l}_{t_i}$,
+and note also that 
+if any variable $x$ is normally distributed with mean $\mu$
+then $x-\mu$ is also normally distributed, 
+but with a zero mean. 
+Proceeding in this manner, 
+it becomes clear,
+for example, 
+that the fixed effect intercept is
+$\mu_\gamma^0 + \mu_\xi^0 + \mu_\zeta$,
+the fixed effect for the main effect corresponding to $z_i$ 
+is
+$\mu_\gamma^4 + \mu_\xi^4$,
+and so on. 
+Also note that this model is maximal [@barr2013random] in
+the sense that there are subject-level, text-level, and word-level random intercepts 
+and subject-level and text-level random slopes for all predictors. 
+
+We fit this model to the observed data using Bayesian inference, 
+implemented using the *Stan* probabilistic programming language [see, e.g., @stan:2017] 
+via the R based `brms` interface [@brms:2017]. 
+Specifically, for all unknown variables in the model,
+which include, for example, the fixed and random effects coefficients,
+the means and variances of their multilevel distributions, and so on,
+we compute the posterior distribution over their possible values
+conditional on the observed data. 
+In other words, 
+on the assumption that this model generated the observed data,
+we obtain the probability distribution over the possible values
+of all its unknown variables.
+
+Having computed the posterior distribution,
+we then evaluate the model.
+We do so by measuring the its 
+out-of-sample predictive performance
+and how this changes when we selectively remove
+one or more 
+of the three computational memory models' predictor variables.
+More specifically, we measure out-of-sample predictive performance 
+using Watanabe Akaike Information Criterion (\waic) 
+(see Appendix \ref{app:out-of-sample} for more detail about \waic 
+and the calculation of out-of-sample predictive performance generally).
+To interpret \waic values,
+we first note that, in general, a model's \waic value is of little meaning in itself, 
+and only becomes meaningful when we compare its value
+to that of other models that were fit to the same data. 
+The larger the differences in the \waic scores between two models, 
+the greater the differences in the relative predictive power
+between the better model, which is the one with the *lower* value, and the other.
+While we will avoid the use of any strict thresholds, 
+and especially avoid dichotomizing \waic differences into 
+*significant* and *non-significant* differences, 
+conventional standards [see, for example, @burnham2003model, Chapter 2]
+hold that \waic differences
+of greater than between $4$ or $7$ 
+indicate clear superiority of the predictive power of the model with the lower \waic,
+while differences of $10$ or more indicate that the model with the 
+higher value has essentially no predictive power
+relative to the model with the lower value.
+More specifically, 
+using the concept of Akaike weights
+[see @burnham2003model, page 75] 
+applied to \waic values,
+we can say that if there are just two models being considered,
+differences in \waic values equal to $4$, $6$, $9$, or $14$ 
+correspond to probabilities of approximately 
+$0.9$, $0.95$, $0.99$, and $0.999$, 
+respectively, 
+that the model with the lower \waic score has the better predictive performance
+[see also @mcelreath:rethinking, Chapter 6]. 
+The standard error of the \waic difference score 
+should be seen as simply a measure of the uncertainty 
+of the estimation of the difference score, 
+and thus we moderate our interpretation of a \waic difference
+by also taking into account its uncertainty. 
+
+
+```{r include=FALSE}
+waic_results_summary <- get_waic_results_summary(cache_directory)
+
+waic_k3 <- waic_results_summary$waic %>% 
+  filter(model == 'k3') %>% 
+  select(waic) %>% 
+  unlist()
+
+waic_table <- rbind(c(waic_select_as_chr(waic_results_summary, 'k3'), 
+                      waic_select_as_chr(waic_results_summary, 'k2_ca'), 
+                      waic_select_as_chr(waic_results_summary, 'k2_pa'),
+                      waic_select_as_chr(waic_results_summary, 'k2_cp')),
+                    c('0.00', 
+                      dwaic_select_as_chr(waic_results_summary, 'k3', 'k2_ca'), 
+                      dwaic_select_as_chr(waic_results_summary, 'k3', 'k2_pa'),
+                      dwaic_select_as_chr(waic_results_summary, 'k3', 'k2_cp'))
+)
+
+colnames(waic_table) <- c('Full model',
+                          '$\\neg \\psibayes$',
+                          '$\\neg \\psicooccur$',
+                          '$\\neg \\psiassoc$')
+
+rownames(waic_table) <- c('\\textsc{waic}',
+                          '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(waic_table, 
+               filename='tmp/k3_recognition_model_drop_one.tex')
+
+min_dwaic <- sapply(c('k2_pa', 'k2_ca', 'k2_cp'), 
+                    function(arg) dwaic_select(waic_results_summary, 'k3', arg)['dwaic']) %>% 
+  min() %>% 
+  floor()
+
+get_dwaic <- function(arg){dwaic_select(waic_results_summary, 
+                               'k3',
+                               arg)}
+
+k3_bayesian_dwaic <- get_dwaic('k2_ca')
+k3_cooccurrence_dwaic <- get_dwaic('k2_pa')
+k3_associative_dwaic <- get_dwaic('k2_cp')
+
+
+#### K2 cp
+
+waic_table <- rbind(c(waic_select_as_chr(waic_results_summary, 'k2_cp'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_c'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_p')),
+                    c('0.00', 
+                      dwaic_select_as_chr(waic_results_summary, 'k2_cp', 'k1_c'), 
+                      dwaic_select_as_chr(waic_results_summary, 'k2_cp', 'k1_p'))
+)
+
+colnames(waic_table) <- c('$\\psibayes,\\psicooccur$',
+                          '$\\neg \\psibayes$',
+                          '$\\neg \\psicooccur$')
+
+rownames(waic_table) <- c('\\textsc{waic}',
+                          '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(waic_table, 
+               filename='tmp/k2_cp_recognition_model_drop_one.tex')
+
+get_dwaic <- function(arg){dwaic_select(waic_results_summary, 'k2_cp', arg)}
+
+k2_cp_bayesian_dwaic <- get_dwaic('k1_c')
+k2_cp_cooccurrence_dwaic <- get_dwaic('k1_p')
+
+#### K2 pa 
+waic_table <- rbind(c(waic_select_as_chr(waic_results_summary, 'k2_pa'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_a'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_p')),
+                    c('0.00', 
+                      dwaic_select_as_chr(waic_results_summary, 'k2_pa', 'k1_a'), 
+                      dwaic_select_as_chr(waic_results_summary, 'k2_pa', 'k1_p'))
+)
+
+colnames(waic_table) <- c('$\\psibayes,\\psiassoc$',
+                          '$\\neg \\psibayes$',
+                          '$\\neg \\psiassoc$')
+
+rownames(waic_table) <- c('\\textsc{waic}',
+                          '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(waic_table, 
+               filename='tmp/k2_pa_recognition_model_drop_one.tex')
+
+get_dwaic <- function(arg){dwaic_select(waic_results_summary, 'k2_pa', arg)}
+
+k2_pa_bayesian_dwaic <- get_dwaic('k1_a')
+k2_pa_assoc_dwaic <- get_dwaic('k1_p')
+
+## k1
+waic_table <- rbind(c(waic_select_as_chr(waic_results_summary, 'k1_p'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_c'), 
+                      waic_select_as_chr(waic_results_summary, 'k1_a'),
+                      waic_select_as_chr(waic_results_summary, 'null')),
+                    c('0.00', 
+                      dwaic_select_as_chr(waic_results_summary, 'k1_p', 'k1_c'), 
+                      dwaic_select_as_chr(waic_results_summary, 'k1_p', 'k1_a'),
+                      dwaic_select_as_chr(waic_results_summary, 'k1_p', 'null'))
+)
+
+colnames(waic_table) <- c('$\\psibayes$',
+                          '$\\psicooccur$',
+                          '$\\psiassoc$',
+                          'Null model')
+
+rownames(waic_table) <- c('\\textsc{waic}',
+                          '$\\Delta^\\textsc{waic}$')
+
+get_dwaic <- function(arg){dwaic_select(waic_results_summary, 'k1_p', arg)}
+
+xtable_to_file(waic_table,
+               filename = 'tmp/k1_p_recognition_model.tex')
+                 
+k1_p_cooccurrence_dwaic <- get_dwaic('k1_c')
+k1_p_associative_dwaic <- get_dwaic('k1_a')
+k1_p_null_dwaic <- get_dwaic('null')
+```
+
+
+
+```{r, results='asis'}
+cat('\\begin{table}',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k3_recognition_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{a) Full multilevel logistic regression model (i.e. Equation~\\ref{eq:full_recognition_model}), compared to when each predictor is individually dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k2_cp_recognition_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{b) Multilevel logistic regression model with two predictors,
+    $\\psibayes$ and $\\psicooccur$, compared to when each predictor is dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k2_pa_recognition_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{c) Multilevel logistic regression model with two predictors,
+    $\\psibayes$ and $\\psiassoc$, compared to when each predictor is dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k1_p_recognition_model.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{d) Multilevel logistic regression model with $\\psibayes$ predictor alone,
+    compared to with $\\psibayes$ alone, $\\psiassoc$ alone, and a null model with no predictors.}}', 
+    '\\end{center}',
+    
+    '\\caption{Recognition memory experiment model comparison results. 
+    Models are compared in terms of their relative out-of-sample predictive peformance, 
+    which is measured by differences in their \\waic scores.
+    In each sub-table above, the top row provides, in the first cell on the left,  
+    the \\waic value of a model to which others are being compared.
+    The following cells on the first row provide the \\waic values of these models.
+    In the next row of the table, labelled $\\Delta^\\waic$, we provide the difference 
+    between the \\waic of each model and that of the model to which they are being compared. 
+    Also on this row, shown in brackets next to each difference score, 
+    we provide the standard error of these differences.}',
+    '\\label{table:recognition_waic}',
+    '\\end{table}', 
+    sep='\n')
+```
+
+The \waic value of the multilevel binary logistic regression 
+presented in Equation&nbsp;\ref{eq:full_recognition_model}, 
+is `r round(waic_k3, 2)`.
+Given that our primary focus is
+to assess how well each of 
+$\psibayes$, 
+$\psi^{\text{Coccurrence}}$, 
+and $\psiassoc$
+predict the behavioural data, 
+we will compare the \waic of this model,
+which has all three predictors, 
+to that of the same model
+but with each predictor separately removed.
+The results of this comparison are shown
+in the Table&nbsp;\ref{table:recognition_waic}a.
+Focusing initially on just the \waic differences,
+we see that compared to when we use all three of the
+$\psibayes$, 
+$\psicooccur$, and
+$\psiassoc$ predictors,
+removing any one leads to a clear drop, 
+i.e., of at least `r min_dwaic`,
+in the corresponding model's predictive performance. 
+This tells us that 
+each of the three models
+improves our prediction of the behavioural data, 
+and also that no one of these models is redundant with respect to the others.
+However, it is also clear 
+that removing $\psibayes$ 
+leads to the most substantial drop, 
+i.e., by `r k3_bayesian_dwaic['dwaic'] %>% round(2)` 
+compared to by
+`r k3_cooccurrence_dwaic['dwaic'] %>% round(2)` (when $\psicooccur$ is dropped)
+and `r k3_associative_dwaic['dwaic'] %>% round(2)` (when $\psiassoc$ is dropped),
+in the model's predictive performance. 
+Furthermore, the standard errors of the \waic differences,
+relative to the corresponding differences themselves,
+are large when we drop either $\psicooccur$
+($\dwaicse=`r k3_cooccurrence_dwaic['se'] %>% round(2)`$,
+ $\dwaic=`r k3_cooccurrence_dwaic['dwaic'] %>% round(2)`$)
+or $\psiassoc$ 
+($\dwaicse=`r k3_associative_dwaic['se'] %>% round(2)`$, 
+ $\dwaic=`r k3_associative_dwaic['dwaic'] %>% round(2)`$),
+compared to when we drop $\psibayes$
+($\dwaicse=`r k3_bayesian_dwaic['se'] %>% round(2)`$, 
+ $\dwaic = `r k3_bayesian_dwaic['dwaic'] %>% round(2)`$).
+
+We may obtain an alternative perspective on these results by comparing 
+a model with two predictors to the model when each one of the two predictors is invidually dropped. 
+Comparing the model with the $\psibayes$ and $\psicooccur$ predictors
+to the model with each one of these dropped, we have the results shown in Table&nbsp;\ref{table:recognition_waic}b.
+When we drop $\psibayes$, the loss in predictive power is substantial, 
+with the \waic increasing by `r k2_cp_bayesian_dwaic[1] %>% round(2)` 
+($\dwaicse=`r k2_cp_bayesian_dwaic[2] %>% round(2)`$), 
+compared to when we drop $\psicooccur$, 
+in which case the \waic increases 
+by `r k2_cp_cooccurrence_dwaic[1] %>% round(2)`
+($\dwaicse=`r k2_cp_cooccurrence_dwaic[2] %>% round(2)`$).
+Similarly, we can compare the model 
+with the $\psibayes$ and $\psiassoc$ predictors
+to the model with each of these predictors individually dropped. 
+This is shown in Table&nbsp;\ref{table:recognition_waic}c.
+In this case, when we drop $\psibayes$, 
+the loss in predictive power is especially large, 
+with the \waic increasing by `r k2_pa_bayesian_dwaic[1] %>% round(2)` 
+($\dwaicse=`r k2_pa_bayesian_dwaic[2] %>% round(2)`$), 
+compared to when we drop $\psiassoc$, 
+whereby the \waic increases by `r k2_pa_assoc_dwaic[1] %>% round(2)`
+($\dwaicse=`r k2_pa_assoc_dwaic[2] %>% round(2)`$).
+
+Finally, we may directly compare the \waic score of the model 
+based on $\psibayes$ alone to that the model 
+using either $\psicooccur$ alone, $\psiassoc$ alone, or a null model 
+that drops all three predictors[^recognition_null_model],
+as shown in Table&nbsp;\ref{table:recognition_waic}d.
+Here, we can see that relative to the predictive performance of the $\psibayes$ predictor, 
+the $\psiassoc$ predictor has clearly poorer predictive performance 
+($\dwaic = `r k1_p_associative_dwaic['dwaic']%>% round(2)`$,
+$\dwaicse = `r k1_p_associative_dwaic['se'] %>% round(2)`$).
+The difference in the \waic between $\psibayes$ and $\psicooccur$
+is also large ($\dwaic = `r k1_p_cooccurrence_dwaic['dwaic']%>% round(2)`$),
+but also with a relatively large standard error
+($\dwaicse = `r k1_p_cooccurrence_dwaic['se'] %>% round(2)`$).
+
+[^recognition_null_model]: The null model 
+has the following form:
+$$
+\ln\left(\frac{p_i}{1-p_i}\right) =
+\beta^0_i + z_i \beta^4_i + \zeta_{w_i}, 
+\quad\text{for each $i \in 1,2 \ldots n$,}
+$$
+where all terms have the same meaning as in Equation&nbsp;\ref{eq:full_recognition_model}.
+In other words, the null model is identical to full model 
+but with the
+$\phi^1$, 
+$\phi^2$, 
+and $\phi^3$ 
+predictors dropped.
+Crucially, it models the log odds of recognition as a 
+linear function of whether the word was in the memory test's text,
+and also allows for random variation in this relationship across both subjects and tests.
+In other words, it is a non-trivial null model that, 
+when compared to a model with either one of the $\phi^1$, 
+$\phi^2$, and $\phi^3$ predictors, can be used to isolate their respective effects.
+
+
+We now turn to the recall memory tests. In each recall memory test,
+the participant was asked to list as many words
+as they could remember from the text that they had
+just read. 
+After removing any non-word responses, the average number of words that 
+were recalled in each test was `r recall_rates['n'] %>% round(2)`.
+On average, 
+`r (100*recall_rates['false_recall_rate']) %>% round()`% of these 
+were false recalls, i.e., words that did not occur in the text 
+(over `r floor(100*unlist(false_positive_recall_rate_greater_than_10pc))`% 
+of the `r n_recall_sessions` recall tests have false recall rates of greater than 10%).
+
+### Recall memory data: Exploratory analyses 
+
+```{r, include=FALSE}
+preliminary_recall_results <- get_recall_preliminary_results(Df_recall)
+
+
+Df_p1 <- preliminary_recall_results$loglike_per_test
+Df_p1_downsample <- sample_frac(Df_p1, size=0.2)
+
+p1 <- preliminary_recall_results$loglike_per_test %>% 
+  ggplot(mapping = aes(x = psi, y = log_likelihood, col=psi)) +
+  geom_boxplot(width=0.25, outlier.shape = NA) +
+  geom_jitter(data = . %>% sample_frac(size = 0.2),
+              width = 0.1, alpha=1.0, size=0.25, fill=NA) + 
+  scale_color_brewer(palette='Dark2') +
+  scale_x_discrete(name = NULL, 
+                   limits=c("bayes","cooccur","assoc"),
+                   labels=c("bayes" = 'Bayesian', 
+                            "cooccur" = 'Cooccurrence',
+                            "assoc" = 'Associative')) +
+  ylab('Log Likelihood of Model') +
+  ylim(preliminary_recall_results$ylim_lb, 0) +
+  theme_classic() +
+  theme(legend.position="none") +
+  coord_fixed(ratio = 1/70.0)
+
+Df_p2 <- preliminary_recall_results$loglike_per_test_diff
+Df_p2_downsample <- sample_frac(Df_p2, size=0.2)
+
+p2 <- Df_p2 %>% 
+  ggplot(mapping = aes(x = psi, y = logbf, col = psi)) +
+  geom_boxplot(width=0.25, outlier.shape = NA) +
+  geom_jitter(data = Df_p2_downsample,
+              width = 0.1, alpha=1.0, size=0.25, fill=NA) + 
+  scale_color_brewer(palette='Dark2') +
+  scale_x_discrete(name = NULL, 
+                   limits=c("bayes_diff_cooccur", "bayes_diff_assoc"),
+                   labels=c("bayes_diff_cooccur" = 'Bayes. vs. Cooccur.', 
+                            "bayes_diff_assoc" = 'Bayes. vs. Assoc.')) +
+  ylab('Log Bayes Factor') +
+  theme_classic() +
+  theme(legend.position="none") +
+  ylim(NA, 35) +
+  coord_fixed(ratio = 1/50)
+
+exploratory_data_analysis_recall_fig_fname <- 'tmp/exploratory_data_analysis_recall_figure.tex'
+exploratory_data_analysis_recall_fig_label <- 'fig:exploratory_data_analysis_recall_figure'
+
+exploratory_data_analysis_recall_fig_caption <- "
+  a) Tukey boxplots of something.
+  b) Tukey boxplots showing the distribution of the $R^2$ values
+  of the linear regression models predicting, separately for each test, the
+  empirical recognition probabilities
+  as a function of normalized log of the recognition probabilities according to each computational model
+  and whether the word was present or not in the corresponding text.
+"
+
+tikz(file=exploratory_data_analysis_recall_fig_fname,
+     standAlone = F,
+     width = textwidth_in_inches)
+plot_grid(p1, p2, align='vh', labels = c('a', 'b'), vjust = 17)
+dev.off()
+clip_tikz_bounding_box(exploratory_data_analysis_recall_fig_fname)
+
+```
+
+
+As in the case of the recognition test data, 
+the primary aim of our analysis of the recall test data is to evaluate how well 
+each of our three computational models of memory 
+predict the memory test responses. 
+Unlike in the case of the recognition tests, however,
+where each response was binary, 
+each response in a recall test, 
+being a word in the English language, 
+is a categorical variable with as many values as there are words in the vocabulary.
+We will label these possible values 
+by the integers $1 \ldots V$, 
+where $V=`r vocab_length`$ is the number of words in the vocabulary[^footnote_explaining_vocabulary_length].
+As such, our entire set of recall data response variables,
+i.e., all the responses produced in all recall tests across all participants,
+can be labelled $y_1, y_2 \ldots y_n$, 
+where each $y_i \in 1 \ldots V$. 
+As with the recognition data, for each trial $i$, 
+we again also have $s_i \in 1\ldots `r n_subjects`$ 
+and $t_i \in 1 \ldots `r number_of_recognition_tests`$, 
+which identify the participant and the memory test, 
+respectively, corresponding to the $i$th observation.
+Each response $y_i$ can be viewed as a sample from 
+participant $s_i$'s subjective probability distribution
+of the words in the text corresponding to test $t_i$.
+This subjective probability distribution essentially represents participant $s_i$'s memory
+of the words in the text corresponding to test $t_i$.
+In other words, 
+having read the text in test $t_i$, 
+participant $s_i$'s memory of what words were and were not present in the text
+can be described as a probability distribution over the entire vocabulary of words,
+presumably with most words being assigned a trivial or neglible probability and
+with most 
+of the probability mass being assigned to a relatively small
+number of words.
+The participants's subsequent recall responses 
+can then be viewed as samples from this probability distribution.
+
+[^footnote_explaining_vocabulary_length]: The computational memory models 
+that we are evaluating all have a vocabulary 
+of exactly $V = `r vocab_length`$ words. Any responses by participants 
+in the recall tests that were outside this vocabulary set were not considered.
+
+```{r, results='asis'}
+cat('\\begin{figure}[!tb]',
+    sprintf('\\input{child_rmd_files/%s}', exploratory_data_analysis_recall_fig_fname),
+    paste0('\\caption{', exploratory_data_analysis_recall_fig_caption,'}'),
+    sprintf('\\label{%s}', exploratory_data_analysis_recall_fig_label),
+    '\\end{figure}', 
+    sep='\n')
+```
+
+For any given recall test, the likelihood, or its logarithm, of the responses according to 
+the Bayesian, Cooccurrence, or Associative models are straightforward to 
+calculate. For example, for subject $j$ performing test $k$, 
+the log of the likelihood of the observed responses according to 
+the Bayesian model is
+$$
+L^{\text{Bayesian}}_{jk} = \sum_{\{i\in\mathcal{S}_{jk}\}} \log\left(\psibayes_{(k, y_i)}\right),
+$$
+where $\mathcal{S}_{jk} \triangleq \{i \colon s_i = j \land t_i = k\}$
+is the set of all trials where $s_i = j$ and $t_i=k$. 
+We may define $L^{\text{Cooccurrence}}_{jk}$ and $L^{\text{Cooccurrence}}_{jk}$ identically using 
+$\psicooccur$ and $\psiassoc$, respectively, in place of $\psibayes$.
+In Figure&nbsp;\ref{`r exploratory_data_analysis_recall_fig_label`}a, 
+we display the distribution  the log of the likelihood of the responses
+in all `r n_recall_sessions` recall memory tests, according the Bayesian, Cooccurrence, or Associative models.
+It is clear from this figure that the Bayesian model 
+has a likelihood across all tests on average 
+(median log likelihood, `r preliminary_recall_results$loglikelihood_median['bayes'] %>% round(2)`) 
+that is higher than the Cooccurrence model 
+(median log likelihood, `r preliminary_recall_results$loglikelihood_median['cooccur'] %>% round(2)`) 
+and the Associative model
+(median log likelihood, `r preliminary_recall_results$loglikelihood_median['assoc'] %>% round(2)`).
+In addition, note that from a Bayesian model comparison perspective, for any $j$ and $k$,
+for example,
+$$L^{\text{Bayesian}}_{jk} - L^{\text{Cooccurrence}}_{jk}$$
+is the log of the Bayes factor of the Bayesian model compared to the Cooccurrence model, 
+with the log Bayes factor for any other pair of models being analogously defined. 
+In Figure&nbsp;\ref{`r exploratory_data_analysis_recall_fig_label`}b,
+we display the distributions of the log Bayes factors comparing the Bayesian to the Cooccurrence model, 
+and the Bayesian to the Associative model, 
+across all `r n_recall_sessions` tests. 
+The log of the Bayes factor comparing the Bayesian model to the Cooccurrence model is 
+greater than zero (hence the Bayes factor itself is greater than 1)
+in `r round(100*preliminary_recall_results$loglike_per_test_diff_gt_0['bayes_beats_cooccur'], 1)`% of cases. 
+Likewise, the log of the Bayes factor 
+comparing the Bayesian model to the Associative model is 
+greater than zero in 
+`r round(100*preliminary_recall_results$loglike_per_test_diff_gt_0['bayes_beats_assoc'], 1)`% of cases.
+Furthermore, according to one of the widely held standards for interpreting Bayes factors [@kass1995bayes], 
+a Bayes factor of $3$, and so a log Bayes factor of log(3), when comparing a model $M_1$ 
+to another model $M_0$ indicates clear or unambiguous evidence 
+in favour of the model $M_1$. By this standard,
+the Bayesian model is clearly superior to the Cooccurrence model 
+in `r round(100*preliminary_recall_results$loglike_per_test_diff_gt_3['bayes_beats_cooccur'], 1)`% of cases, 
+and clearly superior to the Associative model in 
+`r round(100*preliminary_recall_results$loglike_per_test_diff_gt_3['bayes_beats_assoc'], 1)`% of cases.
+These preliminary results therefore show that even at the level of each individual
+recall test done by each individual participant,
+the Bayesian model is superior to the Cooccurrence and Associative model in the vast majority of cases.
+
+We may also compare the models using the data from all tests combined.
+The log of the likelihood of all the observed responses, across all tests and all participants, according to 
+the Bayesian model is
+$$
+L^{\text{Bayesian}} = \sum_{i=1}^n \log\left(\psibayes_{(t_i, y_i)}\right),
+$$
+with $L^{\text{Cooccurrence}}$ and $L^{\text{Cooccurrence}}$ defined identically using 
+$\psicooccur$ and $\psiassoc$, respectively. 
+The log of the Bayes factor comparing the Bayesian model to the Cooccurrence model 
+based on all the data is 
+$L^{\text{Bayesian}} - L^{\text{Cooccurrence}} = `r round(preliminary_recall_results$ll_overall['bayes'] - preliminary_recall_results$ll_overall['cooccur'], 2)`$,
+and the corresponding log of the Bayes factor comparing the Bayesian model to the Associative model is
+$L^{\text{Bayesian}} - L^{\text{Associative}} = `r round(preliminary_recall_results$ll_overall['bayes'] - preliminary_recall_results$ll_overall['assoc'], 2)`$. 
+Clearly, these results indicate an overwhelming 
+case in favour of the Bayesian model over either the Coocurrence and Associative model.
+
+### Recall memory data: Multilevel logistic regression analyses
+
+As with the analysis of the recognition memory data, 
+for the case of the recall memory data,
+our primary aim is to analyse how well each of the three computational memory models
+predict the observed responses.
+We will model the relationship between these three predictors 
+and the recall responses using multilevel categorical logistic regression.
+In particular, for each $i \in 1 \ldots n$, 
+we will model the recall response $y_i$ 
+as a categorical random variable
+whose probability distribution is $\pi_i$ 
+(i.e., $\pi_i$ is an array of length $V$, 
+and for all $v \in 1\ldots V$, 
+$0 \leq \pi_{iv} \leq 1$ 
+and $\sum_{v=1}^V \pi_{iv} = 1$), 
+and model $\pi_i$ as a function of the three predictors. 
+Specifically, our multilevel categorical regression model is as follows:
+for all $i\in 1\ldots n$, $y_i \sim \dcat{\pi_i}$, and for all $v \in 1 \ldots V$,
+\begin{equation}
+\pi_{iv} = \frac{
+e^{\sum_{k=1}^{3} \beta^k_i \phi_{(t_i,v)}^{k}}
+}
+{
+\sum_{v=1}^V e^{\sum_{k=1}^{3} \beta^k_i \phi_{(t_i,v)}^{k}}
+}\label{eq:full_recall_model}.
+\end{equation}
+The coefficients $\beta^1_i, \beta^2_i, \beta^3_i$ are each defined as
+$$
+\beta^l_i = \gamma^{l}_{s_i} + \xi^{l}_{t_i}, \quad\text{for each $l \in 1, 2, 3$,}
+$$
+with $\gamma^l_{s_i}$ being the subject-level random coefficient, 
+and $\xi^l_{s_i}$ being the text-level random coefficient. 
+These effects are normally distributed as follows:
+For each $l \in 1, 2, 3$, 
+for each subject $s_i$, 
+$\gamma_{s_i}^l \sim N(\mu_\gamma^l, \tau^l_\gamma)$,
+and for each text $t_i$, 
+$\xi_{t_i}^l \sim N(\mu_\xi^l, \tau^l_\xi)$.
+
+```{r}
+recall_models <- get_jags_recall_models(cache_directory)
+recall_results_waic <- get_jags_recall_model_waic_v2(recall_models)
+recall_results_dwaic <- get_jags_recall_model_dwaic_v2(recall_models)
+
+include_dwaic_check <- FALSE
+ifelse_alt <- function(test, A, B){if (test) {A} else {B} }
+
+# k3 drop Bayesian, Cooccurrence, Associative
+s_k3 <- lapply(recall_results_waic[c('k3', 'k2_ca', 'k2_pa', 'k2_pc')], 
+               function(x) sprintf('%2.2f', x['waic'])) %>% unlist() %>% unname()
+
+model_k3_drop_waic_table <- as.table(
+  rbind(s_k3,
+        ifelse_alt(include_dwaic_check, as.numeric(s_k3[1]) - as.numeric(s_k3), NULL),
+        c(0.00, lapply(recall_results_dwaic$k3[c('k2_ca', 'k2_pa', 'k2_pc')], 
+                       function(x){sprintf('%2.2f (%2.2f)', -x[1], x[2])}) %>% unlist() %>% unname()))
+)
+
+# The minimum rise in waic having dropped any one predictor from the 3 predictor models
+model_k3_drop_min_dwaic <- lapply(
+  recall_results_dwaic$k3[c('k2_ca', 'k2_pa', 'k2_pc')], 
+  function(x) -x[1]
+) %>% unlist() %>% unname() %>% min()
+
+
+colnames(model_k3_drop_waic_table) <- c('Full model',
+                                        '$\\neg \\psibayes$',
+                                        '$\\neg \\psicooccur$',
+                                        '$\\neg \\psiassoc$')
+
+rownames(model_k3_drop_waic_table) <- c('\\textsc{waic}',
+                                        ifelse_alt(include_dwaic_check, 'check', NULL),
+                                        '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(model_k3_drop_waic_table, 
+               filename='tmp/k3_recall_model_drop_one.tex')
+
+
+# k2 Bayesian + Cooccurrence drop each
+s_k2_pc <- lapply(recall_results_waic[c('k2_pc', 'k1_c', 'k1_p')], 
+                  function(x) sprintf('%2.2f', x['waic'])) %>% unlist() %>% unname()
+model_k2_pc_drop_waic_table <- as.table(
+  rbind(s_k2_pc,
+        ifelse_alt(include_dwaic_check, as.numeric(s_k2_pc[1]) - as.numeric(s_k2_pc), NULL),
+        c(0.00, lapply(recall_results_dwaic$k2_pc[c('k1_c', 'k1_p')], 
+                       function(x){sprintf('%2.2f (%2.2f)', -x[1], x[2])}) %>% unlist() %>% unname()))
+)
+
+colnames(model_k2_pc_drop_waic_table) <- c('$\\psibayes,\\psicooccur$',
+                                           '$\\neg \\psibayes$',
+                                           '$\\neg \\psicooccur$')
+
+rownames(model_k2_pc_drop_waic_table) <- c('\\textsc{waic}',
+                                           ifelse_alt(include_dwaic_check, 'check', NULL),
+                                           '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(model_k2_pc_drop_waic_table, 
+               filename='tmp/k2_cp_recall_model_drop_one.tex')
+
+
+# k2 Bayesian + associative drop each
+s_k2_pa <- lapply(recall_results_waic[c('k2_pa', 'k1_a', 'k1_p')], 
+                  function(x) sprintf('%2.2f', x['waic'])) %>% unlist() %>% unname()
+model_k2_pa_drop_waic_table <- as.table(
+  rbind(s_k2_pa,
+        ifelse_alt(include_dwaic_check, as.numeric(s_k2_pa[1]) - as.numeric(s_k2_pa), NULL),
+        c(0.00, lapply(recall_results_dwaic$k2_pa[c('k1_a', 'k1_p')], 
+                       function(x){sprintf('%2.2f (%2.2f)', -x[1], x[2])}) %>% unlist() %>% unname()))
+)
+
+colnames(model_k2_pa_drop_waic_table) <- c('$\\psibayes,\\psiassoc$',
+                                           '$\\neg \\psibayes$',
+                                           '$\\neg \\psiassoc$')
+
+rownames(model_k2_pa_drop_waic_table) <- c('\\textsc{waic}',
+                                           ifelse_alt(include_dwaic_check, 'check', NULL),
+                                           '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(model_k2_pa_drop_waic_table, 
+               filename='tmp/k2_pa_recall_model_drop_one.tex')
+
+
+# k1
+s_k1 <- lapply(recall_results_waic[c('k1_p', 'k1_c', 'k1_a', 'null')], 
+               function(x) sprintf('%2.2f', x['waic'])) %>% unlist() %>% unname()
+model_k1_waic_table <- as.table(
+  rbind(s_k1,
+        ifelse_alt(include_dwaic_check, as.numeric(s_k1[1]) - as.numeric(s_k1), NULL),
+        c(0.00, lapply(recall_results_dwaic$k1_p[c('k1_c', 'k1_a', 'null')], 
+                       function(x){sprintf('%2.2f (%2.2f)', -x[1], x[2])}) %>% unlist() %>% unname()))
+)
+
+min_k1_dwaic <- (function(s_k1){
+  s <- as.numeric(s_k1)
+  abs((s[1] - s)[2:4]) %>% min()
+})(s_k1)
+
+colnames(model_k1_waic_table) <- c('$\\psibayes$',
+                                   '$\\psicooccur$',
+                                   '$\\psiassoc$',
+                                   'Null model')
+
+rownames(model_k1_waic_table) <- c('\\textsc{waic}',
+                                   ifelse_alt(include_dwaic_check, 'check', NULL),
+                                   '$\\Delta^\\textsc{waic}$')
+
+xtable_to_file(model_k1_waic_table, 
+               filename='tmp/k1_recall_model.tex')
+```
+
+```{r, results='asis'}
+cat('\\begin{table}',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k3_recall_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{a) Full multilevel categorical logistic regression model (i.e. Equation~\\ref{eq:full_recall_model}), compared to when each predictor is individually dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k2_cp_recall_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{b) Multilevel categorical logistic regression model with two predictors,
+    $\\psibayes$ and $\\psicooccur$, compared to when each predictor is dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k2_pa_recall_model_drop_one.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{c) Multilevel categorical logistic regression model with two predictors,
+    $\\psibayes$ and $\\psiassoc$, compared to when each predictor is dropped.}}',
+    '\\end{center}',
+    
+    '\\bigskip',
+    
+    '\\begin{center}',
+    sprintf('\\input{%s}', 'child_rmd_files/tmp/k1_recall_model.tex'),
+    '\\subcaption*{\\parbox{0.75\\textwidth}{d) Multilevel categorical logistic regression model with $\\psibayes$ predictor alone,
+    compared to with $\\psicooccur$ alone, $\\psiassoc$ alone, and a null model with no predictors.}}', 
+    '\\end{center}',
+    
+    '\\caption{Recall memory experiment model comparison results. 
+    As was done for the recognition memory experiment analysis,
+    models are compared in terms of their relative out-of-sample predictive peformance, 
+    which is measured by differences in their \\waic scores.
+    This table is laid out identically to Table~\\ref{table:recognition_waic}:
+    In each sub-table, the first cell in the top row provides  
+    the \\waic value of a model to which others are being compared.
+    The following cells provide the \\waic values of these models.
+    In the next row of the table, the difference 
+    between the \\waic of each model and that of the model to which they are being compared is provided.
+    In brackets next to each difference score, 
+    we provide the standard error of these differences.}',
+    '\\label{table:recall_waic}',
+    '\\end{table}', 
+    sep='\n')
+```
+
+In Table \ref{table:recall_waic}a, 
+we see that compared to when we use all three of the 
+$\psibayes$, 
+$\psicooccur$, and
+$\psiassoc$ predictors,
+removing any one leads to a clear drop in the categorical logistic regression's predictive performance. 
+In particular, 
+there is a rise of at least `r round(model_k3_drop_min_dwaic, 2)`
+in the models' \waic scores
+if any one of these three predictors is dropped, 
+and in all cases there are relatively very small standard errors on these differences.
+However, it is also evident 
+that the rise in the \waic score 
+when $\psibayes$ is dropped, i.e. `r round(-recall_results_dwaic$k3$k2_ca[1], 2)`,
+is considerably larger than when either $\psicooccur$ 
+or $\psiassoc$ is dropped,
+which lead to rises in \waic scores of
+`r round(-recall_results_dwaic$k3$k2_pa[1], 2)`,
+and 
+`r round(-recall_results_dwaic$k3$k2_pc[1], 2)`,
+respectively. 
+
+We may also compare the predictive performance of the model using
+just $\psibayes$ and $\psicooccur$ to that of the model 
+when either of these predictors is dropped. 
+In this case, we see when $\psibayes$ is dropped,
+there is a \waic rise in `r round(-recall_results_dwaic$k2_pc$k1_c[1], 2)`,
+By contrast, when $\psicooccur$ is dropped, the rise in \waic, i.e.,
+`r round(-recall_results_dwaic$k2_pc$k1_p[1], 2)`, is considerably less.
+Similarly, we may compare the predictive performance of the model using
+just $\psibayes$ and $\psiassoc$ to that of the model 
+when either is dropped. When $\psibayes$ is dropped,
+there is a \waic rise of `r round(-recall_results_dwaic$k2_pa$k1_a[1], 2)`,
+and when $\psiassoc$ is dropped, there is a \waic rise of
+`r round(-recall_results_dwaic$k2_pa$k1_p[1], 2)`.
+
+Finally, we can compare the \waic of the models using either 
+$\psibayes$,
+$\psicooccur$,
+or $\psiassoc$, alone. 
+The \waic values of these models are displayed
+in the top row of Table \ref{table:recall_waic}d. 
+In addition, we also provide the \waic value of a null model with no predictors.
+On the second row of that table, we show the rise in the \waic 
+value of each model compared to that of the $\psibayes$ model.
+From this, it is clearly evident that the $\psibayes$ model has a remarkably lower \waic value than the other models, being `r min_k1_dwaic` lower than that of the nearest model.
+
+## Results Summary
+
+From exploratory analyses of both the recognition and recall data, across all
+texts used in this experiment, the probability of recognizing or recalling any
+given word, whether falsely of veridically, is well predicted by the conditional
+probabilities of each word according to the Bayesian, Cooccurrence, and
+Associative computational models.  However, in both the recognition and the
+recall tests, and in both the exploratory analyses and the eventual multilevel
+logistic regression analyses, there is consistently strong, or even
+overwhelming, evidence in favour of the Bayesian model being the best predictor
+of the probability of recognizing or recalling any given word in a text just
+read. For example, in the case of the logistic regression analyses of the
+recognition results, dropping the Bayesian model's predictions, but not those of
+the Cooccurrence or Associative models, from the regression models leads to
+substantial drop the out-of-sample predictive performance as measured by \waic.
+In the case of the logistic regression analyses of the recall memory tests,
+while dropping any one of the three computational models' predictions leads to a
+substantial drop in out-of-sample predictive performance, dropping the Bayesian
+model leads to an overwhelmingly larger drop than dropping those of the
+Coocurrence and Associative models. Likewise, the \waic score of the regression
+model using the predictions of the Bayesian model alone is overwhelmingly better
+than those using the predictions of either the Coocurrence and Associative
+models.
+
+
+

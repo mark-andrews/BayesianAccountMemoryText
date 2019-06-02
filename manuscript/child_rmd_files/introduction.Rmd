@@ -1,0 +1,141 @@
+The study of human memory for linguistic materials that go beyond isolated
+words or sentences --- throughout this manuscript, we'll refer to linguistic
+materials of this nature by the generic term *text* --- has had a long and
+illustrious history in psychology. The seminal study on this topic is usually
+attributed to the classic work of @bartlett:remembering, while the more contemporary
+approach began with the now well known works of 
+@bransford1972contextual,
+@thorndyke1977cognitive,
+@mandler1977remembrance,
+@kintsch1978toward,
+@bower:scripts, 
+and others.
+The importance of the study of text memory stems, on the one hand, from
+the fact that coherent pieces of spoken and written language are paradigm
+examples of naturalistic and ecologically valid stimuli, and as such are
+well suited to studying how human memory works generally.  On the other
+hand, given that the ultimate cognitive result of language comprehension is a
+memory representation of the meaning of the text, language comprehension and
+text memory are inextricably related: understanding text memory facilitates the
+understanding of language comprehension, and vice versa 
+[see, for example, @zwaan1998situation;@van1998construction;@kintsch1998comprehension].
+
+
+Common to virtually all studies on this topic is the characterization of human
+memory for text in terms of the integration of the information inherent in the
+text itself with our background knowledge and experiences, usually described in the form of
+*knowledge schemas*.  @bartlett:remembering is widely credited with first
+describing memory in general, and memory for stories in particular, in these
+terms.  For example, as is now well known, in his classic *War of the Ghosts*
+study, Bartlett described how memories of a native American folktale were
+distorted to fit patterns based on the participants' knowledge and experience.
+Later, studies that followed broadly in Bartlett's tradition, such as
+@bransford1971abstraction, @bransford1972contextual, @bransford1972sentence,
+@sulin1972intrusion, @barclay1973role, demonstrated that memory for text is
+more than the memory for the verbatim information and is in fact built up by
+integrating the information in the text itself with the participants'
+background knowledge and experiences.  With the advent of methods for knowledge
+representation in artificial intelligence research, such as the work on
+knowledge *frames* [e.g., @minsky75] or *scripts* [e.g., @schank1977scripts],
+similar concepts were used or developed within cognitive psychology to describe
+the role of background knowledge in memory for text.  For example,
+@bower:scripts described background knowledge of everyday events in terms of
+prototypical *scripts* that describe the main objects and series of actions
+that characterize the events.  They showed, like Bartlett, that memory for
+texts describing these types of events were distorted to match the patterns in
+the scripts.  Likewise, both @mandler1977remembrance and
+@thorndyke1977cognitive, following the work of @rumelhart:storyschema, 
+described knowledge of narrative structures in terms of
+*story grammars*, with stories being parsed using these grammars such that the
+resulting memory representations are essentially fits of the story to the
+structures defined by the grammar. @van1983strategies, building on the work
+of, for example, @kintsch1974representation and @kintsch1978toward, argued that
+the ultimate outcome of text comprehension is a memory representation of the
+situation or state of affairs that the text describes. Crucially, this memory
+representation is built up using background knowledge in the form of schemas.
+Following from the above mentioned studies, or developed in parallel to it,
+something close to a broad consensus about the general characteristics of
+text memory has emerged. According to this account, which we summarize by the
+schematic shown in Figure \ref{fig:schematic}a, the recognition or recall of items in a text is
+based on querying a memory representation that has been built up by integrating
+the information in the text itself with background knowledge and experience.
+This consensual view is evident, either explicitly or implicitly, in the following
+sample of studies over the past few decades, amongst many others: 
+@garnham1981mental,
+@abbott1985representation,
+@Kintsch:1988,
+@mckoon1992inference,
+@graesser1994constructing,
+@mcnamara1996learning,
+@zwaan1998situation,
+@brainerd1998children,
+@kintsch1998comprehension,
+@schwartz1998time,
+@cain2001comprehension,
+@cook2001situation,
+@frank2003modeling,
+@mason2004brain,
+@shapiro2004including,
+@xu2005language,
+@brainerd2006recollection,
+@frank2008world,
+@crocker2010situated,
+@van2010using,
+@reyna2016fuzzy,
+@danvers2017going,
+@richmond2017constructing,
+@johansson2018gaze,
+@yang2018context.
+
+```{r schematic, child = 'schematic.Rmd'}
+```
+
+Despite being widely endorsed, this general account of text memory is
+nonetheless a predominantly verbal or informal theory.  Its vital
+characteristics and their putative inter-relations, such as those outlined in
+Figure \ref{fig:schematic}a, are usually not formally defined. In particular,
+there is usually no formal or computational account of the nature of background
+knowledge and how it is represented and acquired, how this knowledge is
+integrated with the information in the text itself to form a memory
+representation of the text, nor how this memory representation is queried when
+recalling or recognizing items from the text. For example, in many cases,
+background knowledge is described in terms of schemata but without any
+further specific details or definitions.  However, it was apparent to even some
+of its original advocates that schema theory, as an account of text memory,
+*provides few detailed process assumptions ...  allows sufficient flexibility
+to accommodate post hoc many empirical results ... (and) is of limited
+predictive value and is not testable as a scientific theory*
+[@thorndyke1980critique, page 23]. Likewise, @alba:schematic criticized schema
+theory, particularly as applied to text memory, as being ill defined and
+lacking any systematic treatment, and this criticism of the vague nature of
+schemas in psychology and neuroscience is still valid [see, for example,
+@ghosh2014memory].  In other cases, such as @schank1977scripts,
+@rumelhart:storyschema, @mandler1977remembrance and @thorndyke1977cognitive,
+where background knowledge was defined in more formal terms, the grammars or
+other knowledge structure had to be manually coded and were done so for only a
+limited set of illustrative examples, and the parsing of text content in
+terms of these grammars or knowledge structures also had to be peformed manually.  Even
+ostensibly formal or computational models of knowledge influences on text
+representation, such as @Kintsch:1988, @kintsch1998comprehension,
+@trabasso1998modeling, @van1999landscape, @schmalhofer2002unified,
+@trabasso2003story, @tzeng2005computational, also rely heavily or exclusively
+on either manual parsing of text structures, manual coding of background
+knowledge schemas and the inference that they lead to, or can can only be
+applied to small and contrived text examples as opposed to naturalistic text.
+Consequently, at present, there is no formal or computational account of how
+background knowledge is used to infer a memory representation of text content
+that is sufficiently precise to lead to testable empirical predictions using
+everyday texts. As such, this general account is challenging to test or falsify, or to refine and
+elaborate as a theory of memory or of cognition generally. 
+
+The aim of the present paper is therefore to present a formal theoretical
+account of text memory in terms of Bayesian inference and prediction, and to
+test its behavioural predictions with memory experiments using everyday texts.
+Specifically, we will present a Bayesian computational model that describes the
+memory representation of a text in terms of statistically inferred patterns in
+the text, and describe the recognition and recall of words in the text in terms
+of predictive inferences based on these statistical patterns. This model allows
+us to make precise empirical predictions concerning the probability that any
+given word will be recalled or recognized, whether falsely or veridically, from
+any given text, and we will test these predictions in behavioural studies using
+a representative sample of everyday English texts.

@@ -1,0 +1,73 @@
+\begin{figure}
+\centering
+\begin{minipage}{.4\textwidth}
+\centering
+{\footnotesize
+\begin{algorithmic}
+\STATE {$\psi\vert c \sim \ddirich{c\cdot\mathbf{1}_V}$}
+\FOR{$k \in 1, 2, \ldots K\ldots$} \STATE {$\phi_k\vert\psi, b \sim \ddirich{b\psi}$} \ENDFOR
+\STATE {$m\vert\gamma \sim \dstick{\gamma}$}
+\FOR{$j \in 1, 2, \ldots J$} \STATE {$\pi_j\vert a, m\sim \ddp{a,m}$} 
+          \FOR{$i \in 1, 2, \ldots n_j$} 
+          \STATE {$x_{ji} \given \pi_j \sim \dcat{\pi_j}$} 
+          \STATE {$w_{ji} \given \phi \sim \dcat{\phi_{[x_{ji}]}}$} 
+          \ENDFOR
+\ENDFOR
+\STATE {$b \sim \dgamma{1,1},\  c \sim \dgamma{1,1}$}
+\STATE {$a \sim \dgamma{1,1},\  \gamma \sim \dgamma{1,1}$}
+\end{algorithmic}
+}
+
+\end{minipage}%
+\begin{minipage}{.6\textwidth}
+\centering
+
+\begin{tikzpicture}
+\matrix[row sep=0.5cm,column sep=0.5cm] {
+\node (b) [parameter]{$b$};&&& \node (wji) [observation]{$w_{j\!i}$};&\\
+\node (phi) [parameter]{$\phi_{\!k}$};&  \node (klim) [limit,xshift=-5mm,yshift=-2mm]{$k\!\in\!\{1,2 \ldots \}$};    && \\
+	&&& \node (xji) [state]{$x_{j\!i}$};& \node (xlim) [limit]{$i\!\in\!\{1...n_j\}$};\\
+	\node (psi) [parameter]{$\psi$};&&& \\
+\node (c) [parameter]{$c$};&\node (a) [parameter]{$a$};&& \node (pij) [parameter]{$\pi_{j}$};&\node (jlim) [limit]{$j\!\in\!\{1...J\}$};\\ 
+&&& \node (phantompji) {};&\\ 
+	&&& \node (m) [parameter]{$m$};&\node (gamma) [parameter]{$\gamma$};\\
+};
+
+\path (phi) edge[->] (wji) ;
+\path (psi) edge[->] (phi) ;
+\path (xji) edge[->] (wji) ;
+\path (b) edge[->] (phi);
+\path (pij) edge[->] (xji) ;
+\path (c) edge[->] (psi);
+\path (m) edge[->] (pij) ;
+\path (gamma) edge[->] (m);
+\path (a) edge[->] (pij);
+
+\begin{pgfonlayer}{background}
+\node [background,yshift=1mm,inner sep=3mm,fit=(wji) (xji) (xlim) ] {};
+\node [background,yshift=0mm,inner sep=5mm,fit=(wji) (xji) (xlim) (pij)] {};
+\node [background,rounded corners=1mm,yshift=0mm,inner sep=2mm,fit=(phi) (klim)] {};
+\end{pgfonlayer}
+
+\end{tikzpicture}
+
+\end{minipage}
+
+  \caption{The hierarchical Dirichlet process topic model (\hdptm) is a
+  generative model of a bag-of-words language corpus. Any bag-of-words corpus
+  can be specified as a set of $J$ unordered sets of words $\data = \{w_{j1},
+  w_{j2} \ldots w_{jn_j}\}^{J}_{j=1}$. The system of probabilty distributions
+  shown on the left specifies the probabilistic generative model of $\data$
+  according to the \hdptm. On the right, we provide a so-called \emph{Bayesian
+  network} that shows all the variables in the \hdptm and their
+  inter-dependencies. The Bayesian network is a directed acyclic graph
+  (\textsc{dag}) with each node or vertex in the graph being a random variable
+  in the \hdptm. A shaded node indicates that the variable is observed. A
+  directed edge between any two variables indicates that the random variable to
+  which the edge is directed is dependent on the value of the random variable
+  from it orginates. The set of random variables and the directed edges between
+  them in the Bayesian network is completely determined by the system of
+  probability distributions shown on the left.}
+
+  \label{fig:generative_model}
+\end{figure}

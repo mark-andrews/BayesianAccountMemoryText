@@ -1,0 +1,68 @@
+\usepackage{xspace}
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+%\usepackage{subfig}
+\usepackage{amsmath}
+\usepackage{algorithmic}
+
+\newcommand*{\given}{\vert}
+\newcommand{\Prob}[1]{\mathrm{P}(#1)}
+\newcommand{\data}{\mathcal{D}}
+\newcommand{\hdptm}{\textsc{hdptm}\xspace}
+\newcommand{\bnc}{\textsc{bnc}\xspace}
+\newcommand{\tfidf}{\textsc{tf-idf}\xspace}
+\newcommand{\bic}{\textsc{bic}\xspace}
+\newcommand{\textj}[1]{t_#1}
+\newcommand{\dcat}[1]{\mathrm{Categorical}(#1)}
+\newcommand{\ddirich}[1]{\mathrm{Dirichlet}(#1)}
+\newcommand{\ddp}[1]{\mathrm{DirichletProcess}(#1)}
+\newcommand{\dstick}[1]{\mathrm{StickBreaking}(#1)}
+\newcommand{\dgamma}[1]{\mathrm{Gamma}(#1)}
+\newcommand{\waic}{\textsc{waic}\xspace}
+\newcommand{\dwaic}{\Delta^\waic}
+\newcommand{\dwaicse}{\Delta^\waic_{\text{\textsc{se}}}}
+\newcommand{\psimodel}[1]{\psi^{\text{#1}}}
+\newcommand{\Probc}[1]{\mathrm{P}_{\text{\!\tiny \textsc{c}}}( #1 )}
+\newcommand{\Proba}[1]{\mathrm{P}_{\text{\!\tiny \textsc{a}}}( #1 )}
+\newcommand{\drm}{\textsc{drm}\xspace}
+\newcommand{\psibayes}{\psimodel{Bayesian}}
+\newcommand{\psicooccur}{\psimodel{Cooccurrence}}
+\newcommand{\psiassoc}{\psimodel{Associative}}
+
+\usepackage{caption}
+%\usepackage[margin=75pt]{subcaption}
+\usepackage{subcaption}
+
+\usepackage{tikz}
+\usetikzlibrary{backgrounds}
+
+
+\RequirePackage{tikz}
+\usetikzlibrary{trees}
+\usetikzlibrary{matrix}
+
+\usetikzlibrary{decorations.pathmorphing} % noisy shapes
+\usetikzlibrary{fit}					% fitting shapes to coordinates
+\usetikzlibrary{backgrounds}	% drawing the background after the foreground
+\usetikzlibrary{matrix}
+
+\tikzstyle{background}=[rectangle, fill=none,
+						draw=black,
+                                                inner sep=0.3cm,
+                                                rounded corners=3mm]
+
+\tikzstyle{observation}=[circle,font=\small,minimum size=5mm,inner sep=0mm,
+                                    draw=black!70,
+                                    fill=black!10]
+
+\tikzstyle{state}=[circle,font=\small,minimum size=5mm,inner sep=0mm,
+                                   draw=black!70,
+                                    fill=none]
+
+\tikzstyle{limit}=[rectangle,font=\small,minimum size=0mm,inner sep=0mm,
+                                    fill=none]
+
+\tikzstyle{parameter}=[circle,font=\small,minimum size=5mm,inner sep=0mm,
+                                   draw=black!70,
+                                    fill=none]
+

@@ -1,0 +1,55 @@
+# Sample size determination \label{app:sample_size_determination}
+
+We conducted numerical simulations to determine the total number of
+participants, the total number of different memory tests, and the number of
+memory tests per participant that were required to detect, with high
+probability, the predictive effect of the Bayesian (or alternative)
+computational model on recognition and recall memory scores.
+
+Given that the outcome variables in the memory
+experiments are in the form of either memory recognition scores, which are binary
+values, or memory recall values, which are categorical (multinomial) values, and
+given that there is random inter-participant and inter-text variability in these
+outcome variables, the predictions of the Bayesian model and alternatives were
+tested using multilevel (i.e., random slopes and intercepts) logistic regression
+analyses with one predictor variable that gives the predictions of the Bayesian
+(or alternative) computational model. First, we generated data from a multilevel
+logistic regression model under the following conditions: 
+
+* total number of participants ranging from 25 to 150
+* total number of distinct memory tests ranging from 5 to 50
+* total number of tests per subject ranging from 3 to 5
+* effects of predictor from low to high on a standard scale
+* inter-subject variation, and inter-text variation, ranging from low to high. 
+
+We generated 50,000 data sets for each combination of these
+settings[^intensive-simulations], and calculated the probability of obtaining
+Bayesian Information Criterion (\bic) scores for the inferred multilevel
+logistic regression that was less than 10 units below that of a null model. The
+null model was identical in all respects to the multilevel logistic regression,
+but with the coefficient for the predictor variable being set to zero. These
+simulations made clear that if the experiment uses a large number of
+participants (i.e. at least 150), and a large number of texts (i.e. at least
+50), then there is a high probability of detecting the predictive effect of the
+computational model. This is the case even if we assume that the true effect
+size of the predictive effect is low on a standard scale. In addition, we have
+high probability of detecting the effect even if each participant performs only
+three memory tests each.
+
+Additional analyses confirmed that if we had 10 tests in total, and each
+participant performed each one of these tests, then even with large numbers of
+participants, there is high probability of detecting effects only if the effects
+are assumed to be large or very large on a standard scale. This is an important
+finding given that experimental designs where all participants are exposed to
+all the stimuli are very common designs. Our simulations show, however, that
+these are sub-optimal designs, and that using a large number of tests, but with
+each participant performing only a small sample of these tests, are to be
+preferred.
+
+How to obtain further details about these simulations, including all the R and
+Python code used to perform them are provided in Appendix A.
+
+[^intensive-simulations]: These simulations were run by parallel processes and
+took approximately 60 hours on a 16 core Xeon E5-2690.
+
+

@@ -1,0 +1,55 @@
+\begin{figure}
+\centering
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[thick,node distance=6mm and 3cm]
+\tikzstyle{lables}=[font=\scriptsize]
+\node (ab) at (-3.0,3) {a)};
+\node (knowledge) at (0,2) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (representation) at (0,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (text) at (2.5,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (memory) at (-2.5,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\draw [->] (knowledge) -- (representation);
+\draw [->] (text) -- (representation);
+\draw [->] (representation) -- (memory);
+\node[lables, below of=representation] (representationlabel) {Representation};
+\node[lables, above of=knowledge] (knowledgelabel) {Knowledge};
+\node[lables, above of=text] (textlabel) {Text};
+\node[lables, above of=memory] (memorylabel) {Memory};
+\end{tikzpicture}
+\vspace{5mm}
+\end{minipage}%
+\begin{minipage}{.5\textwidth}
+\centering
+\begin{tikzpicture}[thick,node distance=6mm and 3cm]
+\tikzstyle{lables}=[font=\scriptsize,text centered]
+\node (ab) at (-3.6,3) {b)};
+\node (knowledge) at (0,2) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (representation) at (0,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (text) at (2.5,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\node (memory) at (-3.1,1) [inner sep=0pt,minimum size=3mm,circle,draw] {};
+\draw [->] (knowledge) -- (representation) node[red,right,midway] {{\tiny Bayes's rule}};
+	\draw [->] (text) -- (representation);
+	\draw [->] (representation) -- (memory) node[red,above,midway] {{\tiny posterior prediction}};
+	\node[lables, below of=representation,text width=5cm,align=center] (representationlabel) {Representation\\{\tiny (statistical patterns inherent in the text)}};
+	\node[lables, above of=knowledge,text width=5cm,align=center] (knowledgelabel) {Knowledge\\{\tiny (statistical patterns in language)}};
+	\node[lables, above of=text] (textlabel) {Text};
+	\node[lables, above of=memory] (memorylabel) {Memory};
+	\end{tikzpicture}
+	\vspace{5mm}
+\end{minipage}
+
+  \caption{a) A schematic representation of the widely held account of text
+  memory.  According to this account, we use our background knowledge to
+  construct a representation of the text's content, and our recall or
+  recognition of words in the text is based on querying this representation. b)
+  A Bayesian computational model version of the general account of text memory.
+  Background knowledge is knowledge of statistical patterns that represent the
+  discourse topics that characterize natural language. The memory
+  representation of the text's content is obtained by inferring, using Bayes's
+  rule, which discourse topics are inherent in that text. Finally, the recall or recognition of 
+  words from the text is based on posterior predictive probability that describes
+  which words are and are not typical of topics that were inferred in the text.}
+
+  \label{fig:schematic}
+\end{figure}

@@ -1,0 +1,161 @@
+---
+title             : "A Bayesian Account of Memory for Text"
+shorttitle        : "A Bayesian Account of Memory for Text"
+
+author: 
+  - name          : "Mark Andrews"
+    affiliation   : "1"
+    corresponding : yes    # Define only one corresponding author
+    address       : "Department of Psychology, 50 Shakespeare St, Nottingham NG1 4FQ"
+    email         : "mark.andrews@ntu.ac.uk"
+
+affiliation:
+  - id            : "1"
+    institution   : "Nottingham Trent University"
+
+authornote: |
+  All the code, stimuli, and experimental data described in this paper are freely and openly available. See Appendix \ref{app:open_science} for details. 
+
+  
+abstract: |
+  
+  
+keywords          : "Bayesian models; Memory; Reconstructive memory; Text memory"
+wordcount         : 5000
+
+bibliography      : ["mjandrews.bib"]
+
+floatsintext      : yes
+figsintext        : yes
+figurelist        : no
+tablelist         : no
+footnotelist      : no
+linenumbers       : no
+mask              : no
+draft             : no
+
+documentclass     : "apa6"
+classoption       : "doc"
+
+output: 
+  papaja::apa6_pdf:
+    keep_tex: TRUE
+
+header-includes:
+  - \input{include}
+  
+appendix: 
+  - "child_rmd_files/open_science_stuff.Rmd"
+  - "child_rmd_files/sample_size_determination.Rmd"
+  - "child_rmd_files/out-of-sample.Rmd"
+  
+---
+
+```{r setup, include = FALSE}
+
+# Seed for the minimal amount of random sampling below
+set.seed(10101)
+
+# Load all packages
+library("papaja")
+library("readr")
+library("dplyr")
+library("knitr")
+library("xtable")
+library("tikzDevice")
+library("pander")
+
+# Global chunk options
+opts_chunk$set(echo=FALSE, 
+               warning=FALSE, 
+               message=FALSE)
+
+# xtable options
+options(xtable.comment = FALSE,
+        xtable.booktabs = TRUE)
+
+options(tikzLatexPackages = c(
+  getOption("tikzLatexPackages" ),
+  "\\usepackage{amsmath}",
+  "\\usetikzlibrary{backgrounds}")
+)
+
+# 
+textwidth_in_inches <- 469.75/72.26
+
+# tmp directory for tikZ tex files etc generated below
+# if already exists, nothing happens
+dir.create('child_rmd_files/tmp', showWarnings = FALSE)
+
+# Source special purpose utilities
+source('utils.R')
+
+# General set up
+
+# The md5sums of the necessary files:
+# 114235cef3681206831921ec21a39a6a  bnc_vocab_49328.txt
+# b2655a2b118f353b498a4c534c37dade  experiment_brisbane_recall_memory_tests_results.csv
+# 01b362f5b578713559bf34726d48fee5  experiment_brisbane_recognition_memory_tests.csv
+
+cache_directory <- 'cache'
+vocab_filename <- 'bnc_vocab_49328.txt'
+recognition_data_filename <- 'experiment_brisbane_recognition_memory_tests.csv'
+recall_data_filename <- 'experiment_brisbane_recall_memory_tests_results.csv'
+
+# Get data 
+Df_recognition <- get_recognition_data(file.path(cache_directory, recognition_data_filename))
+Df_recall <- get_recall_data(file.path(cache_directory, recall_data_filename))
+
+# The vocabulary for the models.
+vocab <- read_csv(file.path(cache_directory, vocab_filename), col_names = F) %>% pull(X1)
+vocab_length <- length(vocab)
+
+```
+
+# Introduction
+
+```{r introduction, child = 'child_rmd_files/introduction.Rmd'}
+```
+
+# A Bayesian Model of Text Representation and Memory
+
+```{r introduction, child = 'child_rmd_files/bayesian_model.Rmd'}
+```
+
+# Experimental Evaluation of the Bayesian Model
+
+```{r introduction, child = 'child_rmd_files/evaluation.Rmd'}
+```
+
+# Discussion
+
+```{r introduction, child = 'child_rmd_files/discussion.Rmd'}
+```
+
+\newpage 
+
+
+# References
+
+
+\begingroup
+\setlength{\parindent}{-0.5in}
+\setlength{\leftskip}{0.5in}
+
+<div id = "refs"></div>
+\endgroup
+
+```{r echo = FALSE, results = 'asis'}
+render_appendix('child_rmd_files/open_science_stuff.Rmd')
+```
+
+
+```{r echo = FALSE, results = 'asis'}
+render_appendix('child_rmd_files/sample_size_determination.Rmd')
+```
+
+
+```{r echo = FALSE, results = 'asis'}
+render_appendix('child_rmd_files/out-of-sample.Rmd')
+```
+

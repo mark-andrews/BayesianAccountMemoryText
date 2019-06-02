@@ -1,0 +1,125 @@
+```{r}
+library(readr)
+library(dplyr)
+library(wordcloud)
+library(magrittr)
+library(tikzDevice)
+
+# Other options for texts 
+# 7, 49, 43, 2, 0, 20, 34, 42, 44, 41, 6, 28, 24
+text_ids <- paste0('text_', c(7, 49, 2))
+
+Df <- read_csv("hdptm_201117172636_2290_posterior_predictions_demo.csv")
+
+set.seed(101)
+
+make_wordcloud <- function(text_id, K=50){
+  Df %>% 
+    filter(text == text_id) %>% 
+    slice(1:K) %$% 
+    wordcloud(words = item, 
+              freq = probability, 
+              max.words = K, 
+              rot.per=0.0,
+              fixed.asp = TRUE, 
+              random.order = F)
+}
+
+clip_tikz_bounding_box <- function(filename){
+  
+  # tikzdevice adds too much white space around its figure
+  # this clips the white space
+  # Thanks to 
+  # https://stackoverflow.com/a/41186942/1009979
+  
+  lines <- readLines(con=filename)
+  lines <- lines[-which(grepl("\\path\\[clip\\]*", lines,perl=F))]
+  lines <- lines[-which(grepl("\\path\\[use as bounding box*", lines,perl=F))]
+  writeLines(lines,con=filename)
+  
+}
+
+scale_tikzpicture_nodes <- function(fname){
+  linez <- readLines(con=fname)
+  matching_line <- grepl("\\\\begin\\{tikzpicture\\}\\[x=1pt,y=1pt\\]", linez, perl = F)
+  linez[matching_line] <- "\\begin{tikzpicture}[x=1pt,y=1pt,scale=0.75,every node/.style={scale=0.7}]"
+  writeLines(linez,con=fname)
+}
+
+textwidth_in_inches <- 469.75/72.26
+
+for (text_id in text_ids){
+  fname <- sprintf('%s_wordcloud.tex', text_id)
+  tikz(file=fname,
+       standAlone = F,
+       width = textwidth_in_inches)
+  make_wordcloud(text_id)
+  dev.off()
+  clip_tikz_bounding_box(fname)
+  scale_tikzpicture_nodes(fname)
+}
+
+```
+
+\begin{figure}
+\noindent{\begin{minipage}{.5\textwidth}
+{\footnotesize\textit{It was a great discovery. But it was utterly disastrous for classical physics.
+An electron encircling a nucleus is continuously subject to acceleration as its
+velocity keeps on changing direction. (Acceleration is just the rate of change
+of velocity.) It is an inexorable \ldots\ldots atom would be unstable, as its electrons spiralled
+ever closer to the nucleus, and it would emit its dying radiation in a band of
+frequencies with no trace of discreteness. The nuclear atom dealt
+the coup de grace to classical physics.}}s
+\end{minipage}
+\hspace{3mm}
+\begin{minipage}{0.5\textwidth}
+\centering
+\input{child_rmd_files/text_49_wordcloud}
+\end{minipage}}
+
+\vspace{5mm}
+
+\noindent{\begin{minipage}{.5\textwidth}
+{\footnotesize\textit{Some social scientists have conceptualised these workers in terms of a reserve
+army of labour. In this case, they would constitute a pool of labour which can
+be utilised in boom periods and disregarded in recessions. This view sees the
+experience of the Third world \ldots\ldots function of the reserve army of
+labour was keeping wages low and, to this end, the absolute size of the reserve
+army need not be very great. The high numbers and continuing growth of this
+sector in Latin America would suggest that concepts of European analysis are not
+sufficient.}}
+\end{minipage}
+\hspace{3mm}
+\begin{minipage}{0.5\textwidth}
+\centering
+\input{child_rmd_files/text_7_wordcloud}
+\end{minipage}}
+
+\vspace{5mm}
+
+\noindent{\begin{minipage}{.5\textwidth}
+{\footnotesize\textit{When John Major talks of a ‘nation being at ease with itself’, which
+particular nation is he speaking about? Is he addressing his comments to all
+those who have become marginalised and dispossessed as a result of right-wing
+Conservative policies over the years? Or is he speaking about that nation of
+complacent and indifferent shopkeepers \ldots \ldots capitalist market like a silk glove.
+England became one nation again, a land of hope and glory, Elgar, teacakes and
+cricket. This England is not one recognised by many of my friends.}}
+\end{minipage}
+\hspace{3mm}
+\begin{minipage}{0.5\textwidth}
+\centering
+\input{child_rmd_files/text_2_wordcloud}
+\end{minipage}}
+\caption{On the left column are shown portions of three example texts used in
+the behavioural experiments for model evaluation. In the right hand column,
+corresponding to each text, we show \hdptm's posterior predictive probability
+distribution over the vocabulary. In each case, the word cloud displays the 50
+most probable words according to the posterior distribution, and it scales each
+word according to its probability. Note that many of the words with relatively
+high posterior predictive probability may not have actually occurred per se in
+the corresponding text. To the extent that the posterior predictive distribution
+is the basis of memory recall and recognition, these item effectively represent
+\emph{false memories}.}
+\label{fig:wordclouds}
+\end{figure}

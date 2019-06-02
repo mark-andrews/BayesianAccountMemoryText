@@ -1,0 +1,3 @@
+*.csv filter=fat -crlf
+*.Rds filter=fat -crlf
+cache/bnc_vocab_49328.txt filter=fat -crlf
