@@ -38,7 +38,7 @@ assert_that(
   )
 )
 
-cache_directory <- '../cache/'
+cache_directory <- 'cache/'
 
 # We assume any required model has been run and is saved in the cache directory.
 # Get model name to file name map.

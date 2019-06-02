@@ -14,7 +14,7 @@ n_chains <- 4
 n_cores <- n_chains
 
 # ================================= READ AND PREPARE THE DATA ==============================================
-cache_directory <- '../cache'
+cache_directory <- 'cache/'
 recognition_data_filename <- 'experiment_brisbane_recognition_memory_tests.csv'
 
 Df <- get.recognition.data(file.path(cache_directory, 

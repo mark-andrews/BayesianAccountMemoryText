@@ -5,7 +5,7 @@ source('utils.R')
 library(rjags)
 
 # ================================ GENERAL PARAMETERS =========================================================
-cache_directory <- '../cache'
+cache_directory <- 'cache/'
 n_chains <- 3
 n_update <- 1000
 n_thin <- 10
