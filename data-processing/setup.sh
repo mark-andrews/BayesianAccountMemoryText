@@ -35,6 +35,7 @@ pip install -e .
 cd $CWD
 
 ln -fs "$(realpath ../make-corpus/cache/Brismo.cfg)" cache
+ln -fs "$(realpath ../make-corpus/cache/bnc_vocab_49324.txt)" cache
 ln -fs "$(realpath ../topic-modelling/data/corpora/bnc_texts_78639361_183975_251_499.npz)" cache
 for f in ../topic-modelling/data/samples/hdptm_201117172636_2290_state_*.npz; 
 	do ln -fs `realpath $f` cache;
