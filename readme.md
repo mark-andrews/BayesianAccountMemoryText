@@ -11,3 +11,68 @@ The sub-directories here are:
 * stimuli-generation: Mostly Python code for generating the to-be-memorized texts and the memory word lists in the behavioural experiments.
 * topic-modelling: Probabilistic topic modelling using the Gustav topic modelling toolbox.
 * manuscript: The RMarkdown and LaTeX manuscript 
+
+
+# Downloading
+
+There are two options for downloading all this code and data. Because the size
+of the entire set of files is large (around 10GB), downloading it is not
+completely trivial. The first option is to use `git` and `git fat`. The other
+is to download a set of partial tar files from FigShare and then `cat` these together. Both of these
+options are probably not part of everyone's everyday workflow and neither is as
+simple as clicking a link.
+
+## Git and git fat
+
+First, you clone the repository as per normal.
+```
+git clone https://github.com/mark-andrews/BayesianAccountMemoryText.git
+```
+
+The next step is to get the "fat" data files, and for this, you first need to
+install and set up [https://github.com/jedbrown/git-fat](git-fat). Personally,
+I've found `git-fat` very easy to install and use, but I've only ever used it
+on Linux, and so can't say how easy it would be to install and use on Macs and
+Windows. I'd guess, it would work quite similarly, or even identically, to
+Linux on Macs, but I believe it's a bit of a pain on Windows due to its
+dependencies, and it might require [http://www.cygwin.com](cygwin).
+
+Assuming that you've installed `git fat`, then do 
+```
+cd BayesianAccountMemoryText
+git fat init
+git fat pull http
+```
+
+The `git fat pull http` step will download around 20GB of files from a small
+private server, and so could take 30 minutes or more or less depending on your
+internet bandwidth.
+
+## Download from Figshare
+
+A `.tar` archive of all the files in Git repository is around 10GB in size.
+Figshare, while generously allowing unlimited public storage space, requires
+files to be less than 5GB. To use Figshare, I've `split` the `.tar` archive
+into four parts using the Unix/Linux `split` command. These can be downloaded
+from Figshare in one zip arcive, but then must be rejoined into a single `.tar`
+archive, and extracted. This is procedure is a bit convoluted, but I did not
+see an alternative.
+
+Go to this Figshare page [https://doi.org/10.6084/m9.figshare.8246900](https://doi.org/10.6084/m9.figshare.8246900), and then click *Download all*. This will download a zip archive. Unzip this, and that should give you the following 4 large files.
+
+	* BayesianAccountMemoryText_tar_partaa
+	* BayesianAccountMemoryText_tar_partab
+	* BayesianAccountMemoryText_tar_partac
+	* BayesianAccountMemoryText_tar_partad
+
+These are `split`ed parts of a large `.tar` archive. On a Unix/Linux system (including Mac OSX and
+presumably with Windows if you use Cygwin or other options), they can be rejoined as follows.
+```
+cat BayesianAccountMemoryText_tar_parta* > BayesianAccountMemoryText.tar
+```
+
+Now, `BayesianAccountMemoryText.tar` is the a `tar` archive and can be extracted as follows.
+```
+mkdir BayesianAccountMemoryText
+tar xf BayesianAccountMemoryText.tar -C BayesianAccountMemoryText
+```
