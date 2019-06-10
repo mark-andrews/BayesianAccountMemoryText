@@ -60,15 +60,15 @@ see an alternative.
 
 Go to this Figshare page [https://doi.org/10.6084/m9.figshare.8246900](https://doi.org/10.6084/m9.figshare.8246900), and then click *Download all*. This will download a zip archive. Unzip this, and that should give you the following 4 large files.
 
-	* BayesianAccountMemoryText_tar_partaa
-	* BayesianAccountMemoryText_tar_partab
-	* BayesianAccountMemoryText_tar_partac
-	* BayesianAccountMemoryText_tar_partad
+	* BayesianAccountMemoryText_tar_part_aa
+	* BayesianAccountMemoryText_tar_part_ab
+	* BayesianAccountMemoryText_tar_part_ac
+	* BayesianAccountMemoryText_tar_part_ad
 
 These are `split`ed parts of a large `.tar` archive. On a Unix/Linux system (including Mac OSX and
 presumably with Windows if you use Cygwin or other options), they can be rejoined as follows.
 ```
-cat BayesianAccountMemoryText_tar_parta* > BayesianAccountMemoryText.tar
+cat BayesianAccountMemoryText_tar_part_* > BayesianAccountMemoryText.tar
 ```
 
 Now, `BayesianAccountMemoryText.tar` is the a `tar` archive and can be extracted as follows.
