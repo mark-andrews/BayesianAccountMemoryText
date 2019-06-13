@@ -5,7 +5,7 @@
 {\footnotesize
 \begin{algorithmic}
 \STATE {$\psi\vert c \sim \ddirich{c\cdot\mathbf{1}_V}$}
-\FOR{$k \in 1, 2, \ldots K\ldots$} \STATE {$\phi_k\vert\psi, b \sim \ddirich{b\psi}$} \ENDFOR
+\FOR{$k \in 1, 2 \ldots$} \STATE {$\phi_k\vert\psi, b \sim \ddirich{b\psi}$} \ENDFOR
 \STATE {$m\vert\gamma \sim \dstick{\gamma}$}
 \FOR{$j \in 1, 2, \ldots J$} \STATE {$\pi_j\vert a, m\sim \ddp{a,m}$} 
           \FOR{$i \in 1, 2, \ldots n_j$} 
@@ -54,7 +54,7 @@
 \end{minipage}
 
   \caption{The hierarchical Dirichlet process topic model (\hdptm) is a
-  generative model of a bag-of-words language corpus. Any bag-of-words corpus
+  generative model of a bag of words language corpus. Any bag of words corpus
   can be specified as a set of $J$ unordered sets of words $\data = \{w_{j1},
   w_{j2} \ldots w_{jn_j}\}^{J}_{j=1}$. The system of probabilty distributions
   shown on the left specifies the probabilistic generative model of $\data$

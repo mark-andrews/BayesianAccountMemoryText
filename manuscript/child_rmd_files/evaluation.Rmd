@@ -47,7 +47,7 @@ A total of `r n_subjects` participants (`r gender_counts['Female']` female,
 95% of participants having ages between `r age_stats['lower']` and 
 `r age_stats['upper']`) took part in the experiment. Participants were recruited on
 an entirely voluntary basis from the student population at Nottingham Trent
-University and elsewhere, with the only restriction being that they be native
+University and elsewhere, with the only restriction being that they were native
 English speakers.
 
 ### Materials
@@ -81,14 +81,14 @@ after removing any words that were in the text iself. In other words, given any
 text, we obtain the paragraph before and after this text as it occurs in the
 \bnc. We then found the words with the 10 highest \tfidf scores in these two
 paragraphs combined, after removing any words that occured in the target text.
-Given that neighbouring paragraph will usually be semantically related to the
+Given that neighbouring paragraphs will usually be semantically related to the
 text, these lure words will usually be a set of words that are semantically
 related to the text, though do not occur in it.
 
 [^tfidf]: Informally speaking, words with high \tfidf values are frequent in the
 text but do not occur frequently in all texts. More precisely, for any word
 $w_i$, its \tfidf value is $f_i \log(N/n_i)$, where $f_i$ is its raw frequency
-count in the corpus as a whole, $n_i$ is number of documents in the corpus where
+count in the text, $n_i$ is number of documents in the corpus where
 word its occurs at least once, and $N$ is the total number of documents in the
 corpus.
 
@@ -111,10 +111,10 @@ For each participant, each experiment session proceeded as follows (see Figure
 \ref{fig:task_diagram} for the task diagram of the experiment). After initial
 information and instructions, which informed participants that they would be
 engaging in memory tasks, one of the sample texts appeared on screen.
-Participants were instructed to read this text at their normal reading.  The
+Participants were instructed to read this text at their normal reading pace.  The
 text stayed on screen for a maximum of 90 seconds, but after 45 seconds,
-participants were able to move on the next screen if they so wished. On the
-following screen participants were asked to play the computer game *Tetris* for
+participants were able to move on to the next screen if they so wished. On the
+following screen, participants were asked to play the computer game *Tetris* for
 exactly 60 seconds. At the completion of the game, participants proceeded to the
 memory task. For each participant and for each text, the memory test was
 randomly chosen to be either a recognition or a recall task. For the recognition
@@ -201,8 +201,8 @@ explanation of highly related memory phenomenon to the one at hand. On the other
 hand, they are theoretically distinct from the knowledge based accounts of text
 memory of which the Bayesian model is a computational implementation. The main
 distinction between knowledge based accounts of memory and associationist ones
-is that the former memories are ultimately based on the meaning of text, while
-in the latter they are based on *meaning*less associations [@reyna2016fuzzy].
+is that in the former, memories are ultimately based on the meaning of text, while
+in the latter, they are based on *meaning*-less associations [@reyna2016fuzzy].
 
 Associative accounts of text memory may be operationalized in different ways.
 Here, we use two operationalisations that differ depending on the precise
@@ -256,7 +256,7 @@ models, including links to all the source code that was used, see Appendix
 
 ## Results
 
-<!-- Summarize the recognition test results -->
+### Recognition memory data analyses
 
 We begin by analysing the recognition memory test data. In each recognition test, 
 the participant was presented 
@@ -267,7 +267,7 @@ either present or absent in the text
 that they had just read. Across all tests, 
 the average response rate was `r 100*round(hit_rate, 2)`%, 
 and the average accuracy was `r 100*round(accuracy_rate, 2)`%, 
-with the false positive rate being `r 100*round(false_positive_rate, 2)`% 
+with the false positive rate being `r as.integer(100*round(false_positive_rate, 2))`% 
 (with over `r floor(100*false_positive_rate_gt_10pc)`% 
 of the `r n_recognition_sessions` tests having a false positive rate greater than 10%), 
 and the false negative rate being `r 100*round(false_negative_rate, 2)`%
@@ -310,7 +310,6 @@ the higher the probability that $y_i = 1$,
 and the lower its value, the higher the probability that $y_i = 0$. 
 
 
-### Recognition memory data: Exploratory analyses
 
 ```{r, include=FALSE}
 recognition_preliminary_results <- get_recognition_preliminary_results(Df_recognition, eps=0.1)
@@ -540,9 +539,6 @@ are `r round(recognition_preliminary_results$rho_median['bayes'], 3)`,
 and `r round(recognition_preliminary_results$rho_median['assoc'], 3)`,
 respectively. 
 
-
-### Recognition memory data: Multilevel logistic regression analyses
-
 We will now more thoroughly analyse how well the memory models predict the human recognition data.
 To begin, 
 if any of the models is predictive of the behavioural responses, 
@@ -660,7 +656,7 @@ of all its unknown variables.
 
 Having computed the posterior distribution,
 we then evaluate the model.
-We do so by measuring the its 
+We do so by measuring its 
 out-of-sample predictive performance
 and how this changes when we selectively remove
 one or more 
@@ -979,6 +975,7 @@ In other words, it is a non-trivial null model that,
 when compared to a model with either one of the $\phi^1$, 
 $\phi^2$, and $\phi^3$ predictors, can be used to isolate their respective effects.
 
+### Recall memory data analyses 
 
 We now turn to the recall memory tests. In each recall memory test,
 the participant was asked to list as many words
@@ -992,7 +989,6 @@ were false recalls, i.e., words that did not occur in the text
 (over `r floor(100*unlist(false_positive_recall_rate_greater_than_10pc))`% 
 of the `r n_recall_sessions` recall tests have false recall rates of greater than 10%).
 
-### Recall memory data: Exploratory analyses 
 
 ```{r, include=FALSE}
 preliminary_recall_results <- get_recall_preliminary_results(Df_recall)
@@ -1116,10 +1112,8 @@ calculate. For example, for subject $j$ performing test $k$,
 the log of the likelihood of the observed responses according to 
 the Bayesian model is
 $$
-L^{\text{Bayesian}}_{jk} = \sum_{\{i\in\mathcal{S}_{jk}\}} \log\left(\psibayes_{(k, y_i)}\right),
+L^{\text{Bayesian}}_{jk} = \sum_{\{i\colon s_i = j, t_i = k\}} \log\left(\psibayes_{(k, y_i)}\right).
 $$
-where $\mathcal{S}_{jk} \triangleq \{i \colon s_i = j \land t_i = k\}$
-is the set of all trials where $s_i = j$ and $t_i=k$. 
 We may define $L^{\text{Cooccurrence}}_{jk}$ and $L^{\text{Cooccurrence}}_{jk}$ identically using 
 $\psicooccur$ and $\psiassoc$, respectively, in place of $\psibayes$.
 In Figure&nbsp;\ref{`r exploratory_data_analysis_recall_fig_label`}a, 
@@ -1176,7 +1170,6 @@ $L^{\text{Bayesian}} - L^{\text{Associative}} = `r round(preliminary_recall_resu
 Clearly, these results indicate an overwhelming 
 case in favour of the Bayesian model over either the Coocurrence and Associative model.
 
-### Recall memory data: Multilevel logistic regression analyses
 
 As with the analysis of the recognition memory data, 
 for the case of the recall memory data,

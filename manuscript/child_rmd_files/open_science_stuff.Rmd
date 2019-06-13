@@ -25,4 +25,4 @@ The sub-directories of this repository are as follows.
 * *sample-size-determination*: Mostly Python (calling R code) code for determining sample size for the behavioural experiment.
 * *stimuli-generation*: Mostly Python code for generating the to-be-memorized texts and the memory word lists in the behavioural experiments.
 * *topic-modelling*: Probabilistic topic modelling using the Gustav topic modelling toolbox.
-* *manuscript*: The RMarkdown and LaTeX manuscript 
+* *manuscript*: The RMarkdown and \LaTeX\ manuscript, including R code for exploratory data analysis and visualizations. 

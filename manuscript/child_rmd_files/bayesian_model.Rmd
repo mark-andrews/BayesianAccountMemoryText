@@ -1,6 +1,6 @@
 In order to motivate the Bayesian model that we will develop, we begin with the
 premise, also shared by virtually all of the studies mentioned above, that the
-memory representation of a text is a representation of it semantic content.  We
+memory representation of a text is a representation of its semantic content.  We
 assume that, to a first approximation, the text's semantic content can be
 described by the set of *discourse topics* that are instantiated in the text,
 with each discourse topic being represented by a cluster of inter-related
@@ -17,12 +17,11 @@ words. As an example, consider the following text:
 could in general be exemplified by words like *plant*, *company*, *factory*,
 *production*, and many others, while a topic such as *technology* could in
 general be exemplified by words like *computer*, *electronics*, *engineering*,
-and many others.  In other words, we can describe any given text by identifying
+and many others.  In other words, we can approximately describe the semantic content of any given
+text by identifying
 within it a set of discourse topics, taken from a potentially large set of
 discourse topics, with each of these discourse topics being characterized by a
-possibly large set of semantically inter-related words.  Each discourse topic,
-therefore, can be approximately identified by a cluster of semantically
-inter-related words.  Whenever we read or hear a text, we infer its discourse
+possibly large set of semantically inter-related words. Whenever we read or hear a text, we infer its discourse
 topics by recognizing different clusters of words, each of which signify
 different topics. These inferred topics then describe our representation of
 what the text is about.  On the basis of this representation, recall or
@@ -46,12 +45,12 @@ $$
 $$
 which gives the probability distribution over the topics that characterize $\data$.
 Having learned the topics that characterise the language, 
-for any particular text, denoted by $\text{j}$, we can then infer, 
+for any particular text, denoted by $\textj{j}$, we can then infer, 
 again via Bayes's rule,
 $$
 \Prob{\pi_j \given \textj{j}},
 $$
-where $\pi_j$ is a probability distribution over the $K$ 
+where $\pi_j$ is a probability distribution over the 
 discourse topics in the language. 
 This is equivalent to performing a
 statistical parse of the topics in the text, and leads to a representation of
@@ -65,11 +64,11 @@ compatible with the text's inferred topics, and from this we can calculate the
 probability that any given word will, whether falsely or veridically, be recognized
 or recalled from the text.  Specifically, having inferred $\pi_j$, we may then calculate
 $$
-\Prob{w \given \textrm{text}_j} = 
-\int\! \Prob{w \given \pi_j} \Prob{\pi_j \given \text{j}}\ d\pi_j,
+\Prob{w \given \textj{j}} = 
+\int\! \Prob{w \given \pi_j} \Prob{\pi_j \given \textj{j}}\ d\pi_j,
 $$
 which gives the probability distribution over the words that 
-are predicted or implied by the $\pi_j$ representation of $\text{j}$.
+are predicted or implied by the $\pi_j$ representation of text $\textj{j}$.
 
 This description provides the outline of a computational version of the general
 account of text memory mentioned above. We provide a schematic of this in
@@ -90,7 +89,7 @@ topics inferred in the text.
 The Bayesian model described thus far assumes a probabilistic language model. In
 other words, it assumes that we have explicitly specified a probabilistic model
 that generates a language corpus, and one that does so specifically in terms of
-a set of component distributions $\Phi = \phi_1, \phi_2 \ldots \phi_K \ldots$,
+a set of component distributions $\Phi = \phi_1, \phi_2 \ldots \phi_k \ldots$,
 each of which is simply a probability distribution over a vocabulary of words.
 This language model, by definition, effectively provides a complete account of
 the probabilistic or statistical structure of language.  There are infinitely
@@ -115,7 +114,7 @@ model, the corpus of language data $\data$ is treated as a set of $J$ texts $\te
 $n_j$ words from a finite vocabulary, represented simply by the $V$ integers
 $\{1, 2 \ldots V\}$. In other words, each $\textj{j} =
 w_{j1}, w_{j2} \ldots w_{ji} \ldots w_{jn_j}$, with each $w_{ji} \in \{1 \ldots
-V\}$, or $\data = \{w_{j1}, w_{j2} \ldots w_{ji} \ldots w_{jn_j}\}_{j=1}^J$.
+V\}$, and so $\data = \{w_{j1}, w_{j2} \ldots w_{ji} \ldots w_{jn_j}\}_{j=1}^J$.
 
 As a generative model of this corpus, the \hdptm treats each observed word
 $w_{ji}$ as a sample from one of infinitely many discourse topics $\phi_1,
@@ -218,7 +217,8 @@ from the posterior distribution over the latent variables that correspond to the
 words in text $\textj{{j^\prime}}$. In the second step, we sample from the
 posterior distribution over $\pi_{j^\prime}$ given the values of
 $\vec{x}_{j^\prime}$ sampled in the previous step. The posterior distributions
-in both of these two steps can be calculated exactly.
+in both of these two steps can be calculated exactly. 
+
 
 ## Implementation and Simulations
 
@@ -232,7 +232,7 @@ behavioural experiment (see next section), this resulted in a set of 183,975
 texts of between 250 and 500 words each, with a collective total of over 78
 million word tokens. After removing stop words, words that occurred less than 5
 times in total in the, and words that did not occur in a standard dictionary of
-English words[^standard_dictionary], there was a total vocabulary of 49,324 word types in the corpus.
+English words[^standard_dictionary], there was a total vocabulary of 49,328 word types in the corpus.
 See Appendix A for details on the Python code used to create the corpus, and for
 how to obtain a copy of the corpus itself.
 
@@ -347,7 +347,7 @@ example, consider the following text.
 > *problem of which goals to prioritise in the light of competing goals.*
 
 \noindent Using the averages of the samples of the posterior of $\phi$, $a$,
-$m$, which we'll denote by $\bar{\phi}$, $\bar{a}$, and $\bar{m}$, respectively,
+$m$, which we denote by $\bar{\phi}$, $\bar{a}$, and $\bar{m}$, respectively,
 we can then draw samples from $\Prob{\pi_{j^\prime} \given \textj{{j^\prime}},
 \bar{\phi}, \bar{a}, \bar{m}}$, the average of which we'll denote by
 $\bar{\pi}_{j^\prime}$. In the following table, we show the 7 most probable
@@ -399,11 +399,11 @@ $$
 $$
 \noindent Illustrations of posterior predictive distributions for some example
 held out texts, which we then use in the behavioural experiments described next,
-are show in Figure \ref{fig:wordclouds}. In each case, the posterior predictive
+are shown in Figure \ref{fig:wordclouds}. In each case, the posterior predictive
 distribution is a distribution over the entire vocabulary of words, and tells us
 how much any given word is compatible with, or typical of, the topic-based
 representation of the text. From this distribution, we have a model of what
-words will and will not, whether veridically or falsely, from any given text.
+words will and will not be remembered, whether veridically or falsely, from any given text.
 
 
 ```{r introduction, child = 'wordcloud.Rmd'}

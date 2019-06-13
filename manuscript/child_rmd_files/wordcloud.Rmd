@@ -112,14 +112,14 @@ cricket. This England is not one recognised by many of my friends.}}
 \input{child_rmd_files/text_2_wordcloud}
 \end{minipage}}
 \caption{On the left column are shown portions of three example texts used in
-the behavioural experiments for model evaluation. In the right hand column,
+the behavioural experiments. In the right hand column,
 corresponding to each text, we show \hdptm's posterior predictive probability
 distribution over the vocabulary. In each case, the word cloud displays the 50
 most probable words according to the posterior distribution, and it scales each
 word according to its probability. Note that many of the words with relatively
 high posterior predictive probability may not have actually occurred per se in
 the corresponding text. To the extent that the posterior predictive distribution
-is the basis of memory recall and recognition, these item effectively represent
+is the basis of memory recall and recognition, these items effectively represent
 \emph{false memories}.}
 \label{fig:wordclouds}
 \end{figure}

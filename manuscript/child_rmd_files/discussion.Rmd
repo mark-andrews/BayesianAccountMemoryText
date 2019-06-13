@@ -46,8 +46,7 @@ strength between the words in the text and any other word
  Equation \ref{eq:proba_w_text}, Page \pageref{eq:proba_w_text}). 
 For example, if word $w_{j^\prime i^\prime}$ is
 highly associated on average with the words in text $\textj{{j^\prime}}$, then 
-it has a high probability of being remembered, either falsely or veridically,
-after having read that text. Compared to these associative models of text memory, 
+it has a high probability of being remembered after having read that text. Compared to these associative models of text memory, 
 by every measure used in the analyses, the predictions of the Bayesian model are 
 superior, often overwhelmingly so. We take this collection of results 
 as strong 
@@ -89,25 +88,26 @@ accounts of text memory.
 
 Another noteworthy finding from the analyses was that although what we have
 termed the *Cooccurrence* and *Associative* models are both in fact associative
-models of text memory, the Coccurrence model had consistently better performance
-than the Associative model. Recall that these two models differ from one another
-solely in terms of their definition of the association between two words, with
-the Coccurrence model defining association in terms of statistical cooccurrence
-within a corpus, and the Associative model defining association in terms of word
-association norm data. One relatively simple explanation for the difference in
-the predictive accuracy of these two models is simply a matter of sparse or
-missing data. Although the association norms that we have used is a very large
-example of its kind, it nonetheless only provides associates for a set of
-approximately 10,000 word types. Moreover, obtaining reliable data for low
-probability associates of any given word generally requires prohibitively large
-numbers of responses. We endeavoured to minimize the effect of data sparsity
-arising from the word association norms by only using texts where most words
-were in word association norm stimulus set. Nonetheless, this may not be
-sufficient to make the predictions based on these norms comparable to those 
-based on the cooccurrence statistics, which are obtained from a relatively
-large corpus of 80 million words. If this explanation of the difference 
-is correct, there may be nothing theoretically interesting about the relative 
-performance of the Cooccurrence and Associative models.
+models of text memory, the Coccurrence model had consistently better
+performance than the Associative model. Recall that these two models differ
+from one another solely in terms of their definition of the association between
+two words, with the Coccurrence model defining association in terms of
+statistical cooccurrence within a corpus, and the Associative model defining
+association in terms of word association norm data. One relatively simple
+explanation for the difference in the predictive accuracy of these two models
+is simply a matter of sparse or missing data. Although the association norms
+that we have used is a very large example of its kind, it nonetheless only
+provides associates for a set of approximately 10,000 word types. Moreover,
+obtaining reliable data for low probability associates of any given word
+generally requires prohibitively large numbers of responses. We endeavoured to
+minimize the effect of data sparsity arising from the word association norms by
+only using texts where most words were in the word association norm stimulus
+set. Nonetheless, this may not be sufficient to make the predictions based on
+these norms comparable to those based on the cooccurrence statistics, which are
+obtained from a relatively large corpus of 80 million word tokens and around
+50,000 word types. If this explanation of the difference is correct, there may
+be nothing theoretically interesting about the relative performance of the
+Cooccurrence and Associative models.
 
 Although we have concluded that the Bayesian model is empirically supported by
 behavioural data, and is supported to a greater extent than some suitable and
@@ -190,7 +190,7 @@ both models, and especially the Cooccurrence model (for reasons discussed
 above), have empirical support from the recognition and recall data, there is
 consistently less empirical support for these models than for the Bayesian
 model. From these findings, we may speculate that although the associationist
-and spreading account of episodic memory is the dominant account of the \drm
+and spreading activation account of episodic memory is the dominant account of the \drm
 effect [see, for example, @roediger:recall_rates;@gallo2013associative], the
 \drm effect may be explained as well, if not better, by a Bayesian account of
 word list memory that is similar to the Bayesian text memory model described
