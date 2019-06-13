@@ -76,3 +76,17 @@ Now, `BayesianAccountMemoryText.tar` is the a `tar` archive and can be extracted
 mkdir BayesianAccountMemoryText
 tar xf BayesianAccountMemoryText.tar -C BayesianAccountMemoryText
 ```
+
+# Related resources
+
+* The probabilistic topic modelling was done using a Python/Fortran toolbox `Gustav`.
+
+> Andrews, M. (2019). Gustav: A probabilistic topic modelling toolbox. Zenodo. [doi:10.5281/zenodo.51824](https://doi.org/10.5281/zenodo.51824).
+
+* The Gibbs sampler for the main topic model used is described in the following manuscript.
+
+> Andrews, M. (2019). A Gibbs Sampler for a Hierarchical Dirichlet Process Mixture Model. PsyArXiv. [doi:10.31234/osf.io/ebzt8](https://doi.org/10.31234/osf.io/ebzt8).
+
+* The behavioural experiments were done using a Python/Javascript web app framework named `Wilhelm`.
+
+> Andrews, M. (2019). Wilhelm: A web application framework for online behavioural experiments. Zenodo. [doi:10.5281/zenodo.2647481](https://doi.org/10.5281/zenodo.2647481).
