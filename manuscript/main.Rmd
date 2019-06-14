@@ -40,7 +40,7 @@ abstract: |
         paper.
 
   
-keywords          : "Bayesian models; Memory; Reconstructive memory; Text memory"
+keywords          : "Bayesian models; Computational models; Human Memory; Reconstructive memory; Text memory"
 wordcount         : "$\\approx 15000$"
 
 bibliography      : ["mjandrews.bib"]
