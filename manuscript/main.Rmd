@@ -21,7 +21,7 @@ abstract: |
   
   
 keywords          : "Bayesian models; Memory; Reconstructive memory; Text memory"
-wordcount         : 5000
+wordcount         : "$\\approx 15000$"
 
 bibliography      : ["mjandrews.bib"]
 
