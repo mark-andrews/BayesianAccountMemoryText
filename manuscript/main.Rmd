@@ -17,8 +17,28 @@ authornote: |
   All the code, stimuli, and experimental data described in this paper are freely and openly available. See Appendix \ref{app:open_science} for details. 
 
   
-abstract: |
-  
+abstract: | 
+        The study of memory for texts has had an long tradition of research
+        in psychology. According to most general accounts, the recognition or recall of
+        items in a text is based on querying a memory representation that is built up
+        on the basis of background knowledge.  The objective of this paper is to
+        describe and thoroughly test a Bayesian model of these general accounts.  In
+        particular, we present a model that describes how we use our background
+        knowledge to form memories in terms of Bayesian inference of statistical
+        patterns in the text, followed by posterior predictive inference of the words
+        that are typical of those inferred patterns.  This provides us with precise
+        predictions about which words will be remembered, whether veridically or
+        erroneously, from any given text.  We tested these predictions using
+        behavioural data from a memory experiment using a large sample of randomly
+        chosen texts from a representative corpus of British English.  The results show
+        that the probability of remembering  any given word in the text, whether
+        falsely or veridically, is well predicted by the Bayesian model.  Moreover,
+        compared to nontrivial alternative models of text memory, by every measure used
+        in the analyses, the predictions of the Bayesian model were superior, often
+        overwhelmingly so. We conclude that these results provide strong evidence in
+        favour of the Bayesian account of text memory that we have presented in this
+        paper.
+
   
 keywords          : "Bayesian models; Memory; Reconstructive memory; Text memory"
 wordcount         : "$\\approx 15000$"
