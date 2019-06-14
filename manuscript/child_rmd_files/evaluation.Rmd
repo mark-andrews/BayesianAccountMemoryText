@@ -1,7 +1,7 @@
 In order to properly evaluate this Bayesian account of memory, we will assess
 how well this model can predict participants' recognition and recall of words
 from everyday texts. Specifically, we will use randomly selected texts from the
-\bnc that particpants read at a normal reading pace, after which their memory is
+\bnc that participants read at a normal reading pace, after which their memory is
 tested using either a recognition or recall test. We then can statistically
 evaluate how well the Bayesian model predicts what participants do and do not
 remember, whether veridicaly or falsely, from these texts.
@@ -80,7 +80,7 @@ words in adjacent paragraphs to the text that had the highest \tfidf scores,
 after removing any words that were in the text iself. In other words, given any
 text, we obtain the paragraph before and after this text as it occurs in the
 \bnc. We then found the words with the 10 highest \tfidf scores in these two
-paragraphs combined, after removing any words that occured in the target text.
+paragraphs combined, after removing any words that occurred in the target text.
 Given that neighbouring paragraphs will usually be semantically related to the
 text, these lure words will usually be a set of words that are semantically
 related to the text, though do not occur in it.
@@ -207,7 +207,7 @@ in the latter, they are based on *meaning*-less associations [@reyna2016fuzzy].
 Associative accounts of text memory may be operationalized in different ways.
 Here, we use two operationalisations that differ depending on the precise
 definition of "association". One approach defines association in terms of
-statistical coccurrences of words in spoken and written language. Another
+statistical cooccurrences of words in spoken and written language. Another
 approaches defines association in terms of word association norms.
 
 The statistical co-occurrence probability of two words, $w_k$ and $w_l$, which
@@ -876,7 +876,7 @@ is `r round(waic_k3, 2)`.
 Given that our primary focus is
 to assess how well each of 
 $\psibayes$, 
-$\psi^{\text{Coccurrence}}$, 
+$\psi^{\text{Cooccurrence}}$, 
 and $\psiassoc$
 predict the behavioural data, 
 we will compare the \waic of this model,
@@ -1085,11 +1085,11 @@ In other words,
 having read the text in test $t_i$, 
 participant $s_i$'s memory of what words were and were not present in the text
 can be described as a probability distribution over the entire vocabulary of words,
-presumably with most words being assigned a trivial or neglible probability and
+presumably with most words being assigned a trivial or negligible probability and
 with most 
 of the probability mass being assigned to a relatively small
 number of words.
-The participants's subsequent recall responses 
+The participants' subsequent recall responses 
 can then be viewed as samples from this probability distribution.
 
 [^footnote_explaining_vocabulary_length]: The computational memory models 

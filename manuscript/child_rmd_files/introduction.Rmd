@@ -114,7 +114,7 @@ schemas in psychology and neuroscience is still valid [see, for example,
 where background knowledge was defined in more formal terms, the grammars or
 other knowledge structure had to be manually coded and were done so for only a
 limited set of illustrative examples, and the parsing of text content in
-terms of these grammars or knowledge structures also had to be peformed manually.  Even
+terms of these grammars or knowledge structures also had to be performed manually.  Even
 ostensibly formal or computational models of knowledge influences on text
 representation, such as @Kintsch:1988, @kintsch1998comprehension,
 @trabasso1998modeling, @van1999landscape, @schmalhofer2002unified,

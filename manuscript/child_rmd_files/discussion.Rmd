@@ -25,8 +25,8 @@ approximately 80 million word portion of the \bnc, and evaluated it using
 recognition and recall memory results from behavioural experiments involving over 200
 participants.
 
-The behavioural experiments show that after reading everday texts under normal
-reading conditions, participants nontheless have relatively high false positive
+The behavioural experiments show that after reading everyday texts under normal
+reading conditions, participants nonetheless have relatively high false positive
 and false negative recognition and recall rates. In other words, when we read
 everyday texts, we have a relatively high probability of falsely remembering
 items that were not in the text, and also missing items that were there. The
@@ -239,86 +239,3 @@ and testable predictions about what will and will not be remembered, whether fal
 from what we read and hear.
 
 
-<!-- statistical patterns, -->
-<!-- learned through experience, -->
-<!-- inferred in  -->
-
-
-
-
-<!-- . This involves describing discourse topics in terms of  -->
-
-
-<!-- forming a semantic representation of what the text is about. -->
-
-
-
-
-<!-- When applied to memory for -->
-<!-- text, the problem being faced crucially involves forming a semantic representation of what the text is about -->
-
-
-<!-- as that outlined in Figure -->
-
-
-
-<!-- according the widely held account of the problem being crucially involves  -->
-
-
-
-<!-- the problem we are faced with involves -->
-<!-- determining what the text is about. -->
-
-
-
-
-
-<!-- For language comprehension, it is uncontroversial to say that  problem we are faced with is forming a semantic representation of what the text is about -->
-
-<!-- As we have described, it is widely held and unconstroversial that -->
-<!-- the problem being faced when  -->
-
-<!-- It is uncontroversial to say that whenever we hear or read spoken or written language, -->
-<!-- we are faced with the a major computational problem we are faced with is forming a semantic representation of what the text is about -->
-
-
-
-
-
-
-
-<!-- anderson1991reflections -->
-
-<!-- outlines a rational account of episodic memory that describes the principal computational problem being faced as the -->
-<!-- storage of information .  -->
-
-<!-- What is the problem being faced? -->
-<!-- What is the solution to that problem? -->
-
-
-
-
-<!-- *computational* (in the -->
-<!-- sense of ; see also @shagrir_on_marr) or *rational* (in the -->
-<!-- sense of ) approaches to episodic memory in -->
-<!-- general, and memory for text in particular. In general, computational or -->
-<!-- rational models are premised on the hypothesis that all aspects of cognition can -->
-<!-- be understood as adaptive solutions to computational problems posed by the -->
-<!-- environment. -->
-
-
-<!-- Thus, for example, @anderson:adaptive outlines a rational account of episodic memory that describes the principal computational problem being faced as the -->
-<!-- storage of information currently being experienced that may become relevant at -->
-<!-- some point in the future.  -->
-
-<!-- visual object recognition -->
-<!-- can be understood as a solution to the problem of determining the object in the -->
-<!-- world that is the cause of a given stimulus pattern on the retina . -->
-<!-- Likewise,  -->
-
-<!-- Applied to the problem of memory for texts, determining precisely -->
-<!-- what information in a text may be relevant requires a probabilistic model of -->
-<!-- the general statistical patterns across spoken and written language. -->
-<!-- Representing the information in a given text in terms of these patterns would -->
-<!-- identify precisely those that are likely to become relevant again at some point -->
-<!-- in the future.  -->

@@ -274,7 +274,7 @@ there is how this background knowledge is used, via Bayes's rule, to infer a
 representation of a text's semantic content. This is effectively the text's
 memory representation. Finally, having inferred the text's representation, the
 recognition or recall of the word's in the text is based on the posterior
-predictive distribution over words conditional of the text's represenation.
+predictive distribution over words conditional of the text's representation.
 
 The model assumes that background knowledge, or at least the background
 knowledge that is most relevant for inferring a text's semantic content, is
