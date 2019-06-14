@@ -12,3 +12,9 @@ wget https://raw.githubusercontent.com/mark-andrews/bibtex/master/mjandrews.bib 
 ```
 
 The `Makefile` contains these commands for your convenience.
+
+The compiled pdf of this manuscript is available  is available at *PsyArXiv*.
+
+> Andrews, M. (2019). A Bayesian Account of Memory for Text. [psyarxiv.com/wju3k](https://psyarxiv.com/wju3k).
+
+

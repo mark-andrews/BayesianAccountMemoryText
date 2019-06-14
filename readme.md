@@ -79,6 +79,10 @@ tar xf BayesianAccountMemoryText.tar -C BayesianAccountMemoryText
 
 # Related resources
 
+* A preprint version of the manuscript (whose source code is available in the *manuscript* directory of this repository) is available at *PsyArXiv*.
+
+> Andrews, M. (2019). A Bayesian Account of Memory for Text. [psyarxiv.com/wju3k](https://psyarxiv.com/wju3k).
+
 * The probabilistic topic modelling was done using a Python/Fortran toolbox `Gustav`.
 
 > Andrews, M. (2019). Gustav: A probabilistic topic modelling toolbox. Zenodo. [doi:10.5281/zenodo.51824](https://doi.org/10.5281/zenodo.51824).
