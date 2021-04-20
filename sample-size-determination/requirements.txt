@@ -34,7 +34,7 @@ pbr==1.8.1
 pexpect==4.0.1
 pickleshare==0.5
 ptyprocess==0.5
-py==1.4.30
+py==1.10.0
 Pygments==2.0.2
 #pymc==2.3.6
 pyparsing==2.0.6
