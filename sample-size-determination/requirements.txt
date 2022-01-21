@@ -8,7 +8,7 @@ functools32==3.2.3.post2
 ipcluster-tools==0.0.11
 ipykernel==4.1.1
 ipyparallel==4.1.0
-ipython==4.0.0
+ipython==7.16.3
 ipython-genutils==0.1.0
 ipywidgets==4.1.1
 Jinja2==2.8
