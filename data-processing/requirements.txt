@@ -22,7 +22,7 @@ jupyter-client==5.1.0
 jupyter-console==5.2.0
 jupyter-core==4.3.0
 MarkupSafe==1.0
-mistune==0.7.4
+mistune==0.8.1
 git+https://github.com/mpi4py/mpi4py@3eb7e36#egg=mpi4py
 mpmath==0.19
 nbconvert==5.2.1
